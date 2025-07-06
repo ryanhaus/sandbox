@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from pyyoutube import Api 
 
 def main():
+    # process arguments and environment variables
     if len(sys.argv) != 2:
         print(f"Usage: {sys.argv[0]} [video ID]")
         return
@@ -15,6 +16,7 @@ def main():
     load_dotenv()
     YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
     
+    # setup API and get video info
     api = Api(api_key=YOUTUBE_API_KEY)
 
     video = api.get_video_by_id(video_id=video_id)
