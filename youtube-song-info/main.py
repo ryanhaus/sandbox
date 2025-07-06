@@ -8,6 +8,7 @@ from pyyoutube import Api
 def main():
     if len(sys.argv) != 2:
         print(f"Usage: {sys.argv[0]} [video ID]")
+        return
 
     video_id = sys.argv[1]
 
