@@ -45,7 +45,9 @@ def main():
         return
 
     # use audio fingerprinting to identify song
-    # yt.streams.get_audio_only().download()
+    stream = yt.streams.get_audio_only()
+    print(stream)
+    stream.download(filename="download.m4a")
 
 if __name__ == "__main__":
     main()
