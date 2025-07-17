@@ -1,4 +1,6 @@
 module tca9539(
+	input clk, 	   // Clock for simulation only, should be faster than SCL
+
 	input reset_n, // Reset (active low)
 	output int_n,  // Interrupt (active low)
 
