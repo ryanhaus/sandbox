@@ -11,8 +11,8 @@ module tca9539(
     // I2C address selection
     input a0, a1
 
-    // GPIOs (note: only [7:0] and [17:10] are valid, [9:8] are not driven)
-    inout [17:0] port
+    // GPIOs
+    inout [15:0] io_port
 );
 
     // See Table 3 in datasheet
