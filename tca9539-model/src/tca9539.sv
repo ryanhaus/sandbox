@@ -13,4 +13,16 @@ module tca9539(
 	inout [17:0] port
 );
 
+	// See Table 3 in datasheet
+	typedef enum bit [2:0] {
+		INPUT_PORT_0              = 3'b000,
+		INPUT_PORT_1              = 3'b001,
+		OUTPUT_PORT_0             = 3'b010,
+		OUTPUT_PORT_1             = 3'b011,
+		POLARITY_INVERSION_PORT_0 = 3'b100,
+		POLARITY_INVERSION_PORT_1 = 3'b101,
+		CONFIGURATION_PORT_0      = 3'b110,
+		CONFIGURATION_PORT_1      = 3'b111,
+	} command;
+
 endmodule
