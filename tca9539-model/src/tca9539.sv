@@ -9,7 +9,7 @@ module tca9539(
     inout sda,
 
     // I2C address selection
-    input a0, a1
+    input a0, a1,
 
     // GPIOs
     inout [15:0] io_port
@@ -24,7 +24,7 @@ module tca9539(
         POLARITY_INVERSION_PORT_0 = 3'b100,
         POLARITY_INVERSION_PORT_1 = 3'b101,
         CONFIGURATION_PORT_0      = 3'b110,
-        CONFIGURATION_PORT_1      = 3'b111,
+        CONFIGURATION_PORT_1      = 3'b111
     } command;
 
     logic [7:0] input_port_0,
