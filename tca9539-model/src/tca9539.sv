@@ -27,4 +27,13 @@ module tca9539(
 		CONFIGURATION_PORT_1      = 3'b111,
 	} command;
 
+    logic [7:0] input_port_0,
+                input_port_1,
+                output_port_0,
+                output_port_1,
+                polarity_inversion_port_0,
+                polarity_inversion_port_1,
+                configuration_port_0,
+                configuration_port_1;
+
 endmodule
