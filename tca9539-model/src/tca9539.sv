@@ -12,7 +12,8 @@ module tca9539(
     input a0, a1,
 
     // GPIOs
-    inout [15:0] io_port
+    inout [7:0] port0,
+    inout [7:0] port1
 );
 
     // See Table 3 in datasheet
