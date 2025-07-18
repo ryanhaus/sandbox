@@ -43,14 +43,16 @@ module tca9539(
                  reg_polarity_inversion = { polarity_inversion_port_1, polarity_inversion_port_0 },
                  reg_configuration      = { configuration_port_1,      configuration_port_0      };
 
-    // Apply effects of polarity_inversion on inputs and outputs
-    logic [15:0] port_in_val =  reg_input  ^ reg_polarity_inversion;
-    logic [15:0] port_out_val = reg_output ^ reg_polarity_inversion;
+    // 'reg_input'
+    assign reg_input = port ^ reg_configuration;
 
-    // Driver for 'port'
+    // 'port'
     generate
         for (genvar i = 0; i < 16; i++) begin
-            assign port[i] = reg_configuration[i] ? 'bz : port_out_val[i];
+            // 1 -> input, 0 -> output
+            assign port[i] = (reg_configuration[i] == 'b1)
+                                 ? 'bz
+                                 : (reg_output ^ reg_configuration)[i];
         end
     endgenerate
 
