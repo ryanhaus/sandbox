@@ -11,9 +11,8 @@ module tca9539(
     // I2C address selection
     input a0, a1,
 
-    // GPIOs
-    inout [7:0] port0,
-    inout [7:0] port1
+    // IO
+    inout [15:0] port
 );
 
     // Commands, see table 3 in datasheet
@@ -43,5 +42,12 @@ module tca9539(
                  reg_output             = { output_port_1,             output_port_0             },
                  reg_polarity_inversion = { polarity_inversion_port_1, polarity_inversion_port_0 },
                  reg_configuration      = { configuration_port_1,      configuration_port_0      };
+
+    // Driver for 'port'
+    generate
+        for (genvar i = 0; i < 16; i++) begin
+            assign port[i] = reg_configuration[i] ? 'bz : reg_output[i];
+        end
+    endgenerate
 
 endmodule
