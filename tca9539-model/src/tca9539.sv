@@ -44,15 +44,17 @@ module tca9539(
                  reg_configuration      = { configuration_port_1,      configuration_port_0      };
 
     // 'reg_input'
-    assign reg_input = port ^ reg_configuration;
+    always_comb reg_input = port ^ reg_polarity_inversion;
 
     // 'port'
+    logic [15:0] out_adj = reg_output ^ reg_polarity_inversion;
+
     generate
         for (genvar i = 0; i < 16; i++) begin
             // 1 -> input, 0 -> output
             assign port[i] = (reg_configuration[i] == 'b1)
                                  ? 'bz
-                                 : (reg_output ^ reg_configuration)[i];
+                                 : out_adj[i];
         end
     endgenerate
 
