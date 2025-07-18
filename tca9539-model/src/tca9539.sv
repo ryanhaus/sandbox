@@ -2,7 +2,7 @@ module tca9539(
     input clk,     // Clock for simulation only, should be faster than SCL
 
     input reset_n, // Reset (active low)
-    output int_n,  // Interrupt (active low)
+    output logic int_n,  // Interrupt (active low)
 
     // I2C interface
     input scl,
@@ -37,6 +37,8 @@ module tca9539(
                 configuration_port_0,
                 configuration_port_1;
 
+    logic [7:0] input_port; // Holds the most recent read values for INT generation
+
     // 8x 8-bit registers -> 4x 16-bit registers
     logic [15:0] reg_input              = { input_port_1,              input_port_0              },
                  reg_output             = { output_port_1,             output_port_0             },
@@ -52,10 +54,19 @@ module tca9539(
     generate
         for (genvar i = 0; i < 16; i++) begin
             // 1 -> input, 0 -> output
-            assign port[i] = (reg_configuration[i] == 'b1)
-                                 ? 'bz
-                                 : out_adj[i];
+            assign port[i] = (reg_configuration[i] == 'b1) ? 'bz : out_adj[i];
         end
     endgenerate
+
+    // 'int_n'
+    always_comb begin
+        int_n = 'b1;
+
+        for (int i = 0; i < 16; i++) begin
+            if (reg_configuration[i] == 'b1 && port[i] != reg_input[i]) begin
+                int_n = 'b0;
+            end
+        end
+    end
 
 endmodule
