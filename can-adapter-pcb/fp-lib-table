@@ -1,0 +1,5 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "PIC18F26Q83T-I/5N")(type "KiCad")(uri "${KIPRJMOD}/lib/PIC18F26Q83T-I5N")(options "")(descr ""))
+  (lib (name "ATA6560-GBQW-N")(type "KiCad")(uri "${KIPRJMOD}/lib/ATA6560-GBQW-N")(options "")(descr ""))
+)
