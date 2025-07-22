@@ -1,16 +1,12 @@
 module tca9539(
-    input clk,     // Clock for simulation only, should be faster than SCL
+    input clk,     // Clock should be faster than SCL
 
     input reset_n, // Reset (active low)
     output logic int_n,  // Interrupt (active low)
 
     // I2C interface
-    input scl_i,
-    output logic scl_o,
-    output logic scl_oen,
-    input sda_i,
-    output logic sda_o,
-    output logic sda_oen,
+    inout sda,
+    inout scl,
         
 
     // I2C address selection
@@ -22,7 +18,24 @@ module tca9539(
 
     logic rst = ~reset_n;
 
-    // Commands, see table 3 in datasheet
+    // I2C slave
+    logic [7:0] i2c_reg_addr, i2c_data_to_reg, i2c_data_from_reg;
+    logic [2:0] i2c_pin_addr;
+    logic i2c_wr_en, i2c_rd_en;
+
+    i2cSlave i2c_slave (
+        .clk(clk),
+        .rst(rst),
+        .sda(sda),
+        .scl(scl),
+        .regAddr(i2c_reg_addr),
+        .dataToRegIF(i2c_data_to_reg),
+        .writeEn(i2c_wr_en),
+        .dataFromRegIF(i2c_data_from_reg),
+        .pinAddress(i2c_pin_addr)
+    );
+
+    // TCA9539 commands, see table 3 in datasheet
     typedef enum bit [2:0] {
         INPUT_PORT_0              = 3'b000,
         INPUT_PORT_1              = 3'b001,
@@ -34,7 +47,7 @@ module tca9539(
         CONFIGURATION_PORT_1      = 3'b111
     } command;
 
-    // Internal registers, table 3
+    // TCA9539 internal registers, table 3
     logic [7:0] input_port_0,
                 input_port_1,
                 output_port_0,
@@ -43,8 +56,6 @@ module tca9539(
                 polarity_inversion_port_1,
                 configuration_port_0,
                 configuration_port_1;
-
-    logic [7:0] input_port; // Holds the most recent read values for INT generatiog
 
     // 8x 8-bit registers -> 4x 16-bit registers
     logic [15:0] reg_input              = { input_port_1,              input_port_0              },
