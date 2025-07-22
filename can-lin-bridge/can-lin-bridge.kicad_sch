@@ -501,6 +501,664 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "PIC18F26Q83T-I5N:PIC18F26Q83T-I_5N"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "IC"
+				(at 29.21 27.94 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Value" "PIC18F26Q83T-I_5N"
+				(at 29.21 25.4 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Footprint" "QFN65P600X600X100-29N-D"
+				(at 29.21 -74.6 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://www.digikey.lv/en/products/detail/microchip-technology/PIC18F26Q83T-I-5N/21802974"
+				(at 29.21 -174.6 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Description" "8-bit Microcontrollers - MCU CAN, 64KB Flash, 8KB RAM, 12b ADC3, UTMR, DAC, Comp, PWM, CCP, CWG, HLT, WWDT,"
+				(at 21.082 0.254 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Height" "1"
+				(at 29.21 -374.6 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Name" "Microchip"
+				(at 29.21 -474.6 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer_Part_Number" "PIC18F26Q83T-I/5N"
+				(at 29.21 -574.6 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Mouser Part Number" "579-PIC18F26Q83TI5N"
+				(at 29.21 -674.6 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Microchip-Technology/PIC18F26Q83T-I-5N?qs=W%2FMpXkg%252BdQ6TKTuAXextTA%3D%3D"
+				(at 29.21 -774.6 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Arrow Part Number" ""
+				(at 29.21 -874.6 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(property "Arrow Price/Stock" ""
+				(at 29.21 -974.6 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+					(hide yes)
+				)
+			)
+			(symbol "PIC18F26Q83T-I_5N_1_1"
+				(rectangle
+					(start 5.08 22.86)
+					(end 27.94 -25.4)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin passive line
+					(at 0 20.32 0)
+					(length 5.08)
+					(name "RA0"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "27"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 17.78 0)
+					(length 5.08)
+					(name "RA1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "28"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 15.24 0)
+					(length 5.08)
+					(name "RA2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 12.7 0)
+					(length 5.08)
+					(name "RA3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 10.16 0)
+					(length 5.08)
+					(name "RA4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 7.62 0)
+					(length 5.08)
+					(name "RA5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 5.08 0)
+					(length 5.08)
+					(name "RA6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 2.54 0)
+					(length 5.08)
+					(name "RA7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -5.08 0)
+					(length 5.08)
+					(name "RC0"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -7.62 0)
+					(length 5.08)
+					(name "RC1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -10.16 0)
+					(length 5.08)
+					(name "RC2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "10"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -12.7 0)
+					(length 5.08)
+					(name "RC3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "11"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -15.24 0)
+					(length 5.08)
+					(name "RC4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "12"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -17.78 0)
+					(length 5.08)
+					(name "RC5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "13"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -20.32 0)
+					(length 5.08)
+					(name "RC6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "14"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -22.86 0)
+					(length 5.08)
+					(name "RC7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "15"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 13.97 -30.48 90)
+					(length 5.08)
+					(name "VSS_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 16.51 27.94 270)
+					(length 5.08)
+					(name "VDD"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "17"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 16.51 -30.48 90)
+					(length 5.08)
+					(name "VSS_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "16"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 19.05 -30.48 90)
+					(length 5.08)
+					(name "EP"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "29"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 33.02 8.89 180)
+					(length 5.08)
+					(name "RB0"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "18"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 33.02 6.35 180)
+					(length 5.08)
+					(name "RB1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "19"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 33.02 3.81 180)
+					(length 5.08)
+					(name "RB2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "20"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 33.02 1.27 180)
+					(length 5.08)
+					(name "RB3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "21"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 33.02 -1.27 180)
+					(length 5.08)
+					(name "RB4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "22"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 33.02 -3.81 180)
+					(length 5.08)
+					(name "RB5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "23"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 33.02 -6.35 180)
+					(length 5.08)
+					(name "RB6/ICSPCLK"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "24"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 33.02 -8.89 180)
+					(length 5.08)
+					(name "RB7/ICSPDAT"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "25"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 33.02 -11.43 180)
+					(length 5.08)
+					(name "RE3/~{MCLR}/VPP"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "26"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "power:+5V"
 			(power)
 			(pin_numbers
@@ -729,10 +1387,22 @@
 		)
 	)
 	(junction
+		(at 154.94 123.19)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "0987ef1a-3864-4b3f-9b23-d1402382da67")
+	)
+	(junction
 		(at 242.57 106.68)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "3c42bab8-3c89-47ba-bf70-1a819813cd8a")
+	)
+	(junction
+		(at 152.4 123.19)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "62d974cd-6f33-4a3e-a7b4-eab04ae0c94d")
 	)
 	(junction
 		(at 54.61 107.95)
@@ -772,6 +1442,16 @@
 	)
 	(wire
 		(pts
+			(xy 157.48 123.19) (xy 154.94 123.19)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "230ff94e-4642-45fb-86a9-6e6d63c88579")
+	)
+	(wire
+		(pts
 			(xy 245.11 106.68) (xy 242.57 106.68)
 		)
 		(stroke
@@ -802,6 +1482,16 @@
 	)
 	(wire
 		(pts
+			(xy 157.48 121.92) (xy 157.48 123.19)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "44fba099-e632-499d-9cca-b8513db898fc")
+	)
+	(wire
+		(pts
 			(xy 54.61 106.68) (xy 54.61 107.95)
 		)
 		(stroke
@@ -809,6 +1499,26 @@
 			(type default)
 		)
 		(uuid "4f0c9410-9178-44f3-a0a2-5f997e1beb48")
+	)
+	(wire
+		(pts
+			(xy 154.94 123.19) (xy 152.4 123.19)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4f585639-d385-4fca-be66-ab42146feb03")
+	)
+	(wire
+		(pts
+			(xy 154.94 60.96) (xy 154.94 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "65c25d0f-a207-4db3-b7a8-7e7305d7d8a6")
 	)
 	(wire
 		(pts
@@ -872,6 +1582,16 @@
 	)
 	(wire
 		(pts
+			(xy 152.4 121.92) (xy 152.4 123.19)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bdb15cba-340c-4f26-9a3a-7813f95cf76d")
+	)
+	(wire
+		(pts
 			(xy 69.85 99.06) (xy 72.39 99.06)
 		)
 		(stroke
@@ -879,6 +1599,16 @@
 			(type default)
 		)
 		(uuid "cc23a9fc-aa72-4715-b076-14fb7258425a")
+	)
+	(wire
+		(pts
+			(xy 152.4 123.19) (xy 152.4 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cd4c261a-f05c-4a3e-a5b3-aab033cb99da")
 	)
 	(wire
 		(pts
@@ -899,6 +1629,16 @@
 			(type default)
 		)
 		(uuid "d178d0c9-e63b-42d1-9a05-afebaffb7c9d")
+	)
+	(wire
+		(pts
+			(xy 154.94 121.92) (xy 154.94 123.19)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d1de2603-e187-48f1-8ebb-04df53a3344d")
 	)
 	(wire
 		(pts
@@ -1135,6 +1875,229 @@
 				)
 				(justify right)
 				(hide yes)
+			)
+		)
+	)
+	(symbol
+		(lib_id "PIC18F26Q83T-I5N:PIC18F26Q83T-I_5N")
+		(at 138.43 91.44 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "041d9876-6775-4732-8882-337c89ba3121")
+		(property "Reference" "IC1"
+			(at 157.0833 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "PIC18F26Q83T-I_5N"
+			(at 157.0833 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "QFN65P600X600X100-29N-D"
+			(at 167.64 166.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.digikey.lv/en/products/detail/microchip-technology/PIC18F26Q83T-I-5N/21802974"
+			(at 167.64 266.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Description" "8-bit Microcontrollers - MCU CAN, 64KB Flash, 8KB RAM, 12b ADC3, UTMR, DAC, Comp, PWM, CCP, CWG, HLT, WWDT,"
+			(at 159.512 91.186 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Height" "1"
+			(at 167.64 466.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Microchip"
+			(at 167.64 566.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "PIC18F26Q83T-I/5N"
+			(at 167.64 666.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Part Number" "579-PIC18F26Q83TI5N"
+			(at 167.64 766.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Microchip-Technology/PIC18F26Q83T-I-5N?qs=W%2FMpXkg%252BdQ6TKTuAXextTA%3D%3D"
+			(at 167.64 866.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Arrow Part Number" ""
+			(at 167.64 966.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(property "Arrow Price/Stock" ""
+			(at 167.64 1066.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(pin "9"
+			(uuid "ea92829c-df6e-418a-bb2c-5cc7008172c2")
+		)
+		(pin "28"
+			(uuid "747bc22e-90f4-495a-8152-befaea1130e3")
+		)
+		(pin "16"
+			(uuid "770ee000-b99c-436c-b9cb-cd2f574e9a48")
+		)
+		(pin "29"
+			(uuid "89b509ea-756e-4347-bf3b-76fb5d88c572")
+		)
+		(pin "12"
+			(uuid "eafed1c5-a2d9-4ce5-9cc2-c2948e95a818")
+		)
+		(pin "10"
+			(uuid "6db2e438-50e8-4c2d-9db3-4f0cc9b49bcc")
+		)
+		(pin "3"
+			(uuid "5ae82b83-00a4-4f58-b439-b06cb29e8328")
+		)
+		(pin "7"
+			(uuid "9058b647-1954-4af0-9465-a1bf504b0589")
+		)
+		(pin "11"
+			(uuid "450a2362-7352-4458-b71d-6d3b785e2f5f")
+		)
+		(pin "1"
+			(uuid "7e7487cc-a01e-4858-857b-626d08130912")
+		)
+		(pin "13"
+			(uuid "9a99b0de-e291-4146-9e14-e2884c9b8a30")
+		)
+		(pin "5"
+			(uuid "b6746261-5550-401e-bb92-79ed1ba47b03")
+		)
+		(pin "8"
+			(uuid "027fc28d-fc6b-4dec-b885-c733a4957558")
+		)
+		(pin "27"
+			(uuid "9d594f9e-d928-4d2e-a89f-b9d26db9fa0d")
+		)
+		(pin "19"
+			(uuid "b0ea06ff-f156-4abc-bfa2-86348080152f")
+		)
+		(pin "20"
+			(uuid "be946e07-949a-42df-8574-fc8ab39dc8bd")
+		)
+		(pin "21"
+			(uuid "fdad966d-4e8f-434e-8254-27e3bc54bd00")
+		)
+		(pin "22"
+			(uuid "513ff33d-6b96-4f4b-87c8-d483c1a2a443")
+		)
+		(pin "4"
+			(uuid "7e787d9f-8fac-4029-a035-f8695bbcb807")
+		)
+		(pin "14"
+			(uuid "0db7b8f5-b3f7-434c-be85-9b85ef52306e")
+		)
+		(pin "17"
+			(uuid "ddc62ac9-373c-4d65-9bb7-f7dfe0805ba2")
+		)
+		(pin "2"
+			(uuid "4417ce3e-169d-4962-9951-b7a55fb166b3")
+		)
+		(pin "6"
+			(uuid "f57ad28a-0547-466c-a9f2-b5485ea88e2e")
+		)
+		(pin "15"
+			(uuid "3b9d5702-0694-40fb-9910-509aa8a16c61")
+		)
+		(pin "18"
+			(uuid "90366deb-c717-4d34-b7dc-a147fbe33809")
+		)
+		(pin "23"
+			(uuid "225a54ec-9bfd-47d4-ae53-0e3a6559e971")
+		)
+		(pin "26"
+			(uuid "d3e6b27c-30ee-46dd-b5d7-0dc6d76cd6bd")
+		)
+		(pin "24"
+			(uuid "b9ee7ce2-c868-4fbd-82df-d1d38aaa245f")
+		)
+		(pin "25"
+			(uuid "8ff49675-d8ec-4168-9196-5aa3336d7e03")
+		)
+		(instances
+			(project ""
+				(path "/d5aaab65-b0a5-472e-8b3a-9378b5d7faec"
+					(reference "IC1")
+					(unit 1)
+				)
 			)
 		)
 	)
@@ -1430,6 +2393,72 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GND")
+		(at 152.4 124.46 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "4ab6bc95-fbc6-422b-abfd-97a7b26bc07a")
+		(property "Reference" "#PWR07"
+			(at 152.4 130.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 152.4 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 152.4 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 152.4 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 152.4 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "4b16467d-0471-4c9a-8ca8-d879c376bb6a")
+		)
+		(instances
+			(project "can-lin-bridge"
+				(path "/d5aaab65-b0a5-472e-8b3a-9378b5d7faec"
+					(reference "#PWR07")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Interface_CAN_LIN:TJA1029TK")
 		(at 242.57 95.25 0)
 		(unit 1)
@@ -1513,6 +2542,72 @@
 			(project ""
 				(path "/d5aaab65-b0a5-472e-8b3a-9378b5d7faec"
 					(reference "U1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+5V")
+		(at 154.94 60.96 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "79d80b64-df29-4bba-9f80-103746209759")
+		(property "Reference" "#PWR06"
+			(at 154.94 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+5V"
+			(at 154.94 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 154.94 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 154.94 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+5V\""
+			(at 154.94 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "7d0d42b1-3409-42e7-a503-595874e39345")
+		)
+		(instances
+			(project "can-lin-bridge"
+				(path "/d5aaab65-b0a5-472e-8b3a-9378b5d7faec"
+					(reference "#PWR06")
 					(unit 1)
 				)
 			)
