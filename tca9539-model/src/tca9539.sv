@@ -5,8 +5,13 @@ module tca9539(
     output logic int_n,  // Interrupt (active low)
 
     // I2C interface
-    input scl,
-    inout sda,
+    input scl_i,
+    output logic scl_o,
+    output logic scl_oen,
+    input sda_i,
+    output logic sda_o,
+    output logic sda_oen,
+        
 
     // I2C address selection
     input a0, a1,
@@ -14,6 +19,8 @@ module tca9539(
     // IO
     inout [15:0] port
 );
+
+    logic rst = ~reset_n;
 
     // Commands, see table 3 in datasheet
     typedef enum bit [2:0] {
@@ -37,7 +44,7 @@ module tca9539(
                 configuration_port_0,
                 configuration_port_1;
 
-    logic [7:0] input_port; // Holds the most recent read values for INT generation
+    logic [7:0] input_port; // Holds the most recent read values for INT generatiog
 
     // 8x 8-bit registers -> 4x 16-bit registers
     logic [15:0] reg_input              = { input_port_1,              input_port_0              },
