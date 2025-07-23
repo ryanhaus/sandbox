@@ -172,6 +172,7 @@ end
 
 registerInterface_tca9539 u_registerInterface(
   .clk(clk),
+  .rst(rst),
   .addr(regAddr),
   .dataIn(dataToRegIF),
   .writeEn(writeEn),
