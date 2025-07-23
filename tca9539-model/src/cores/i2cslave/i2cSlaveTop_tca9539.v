@@ -45,7 +45,7 @@
 `include "i2cSlave_define_tca9539.v"
 
 
-module i2cSlaveTop (
+module i2cSlaveTop_tca9539 (
   clk,
   rst,
   sda,
@@ -59,7 +59,7 @@ input scl;
 output [7:0] myReg0;
 
 
-i2cSlave u_i2cSlave(
+i2cSlave_tca9539 u_i2cSlave(
   .clk(clk),
   .rst(rst),
   .sda(sda),

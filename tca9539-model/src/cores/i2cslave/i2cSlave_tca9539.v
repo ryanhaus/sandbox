@@ -45,11 +45,12 @@
 `include "i2cSlave_define_tca9539.v"
 
 
-module i2cSlave (
+module i2cSlave_tca9539 (
   clk,
   rst,
   sda,
   scl,
+  deviceAddress,
   myReg0,
   myReg1,
   myReg2,
@@ -64,6 +65,7 @@ input clk;
 input rst;
 inout sda;
 input scl;
+input [7:0] deviceAddress;
 output [7:0] myReg0;
 output [7:0] myReg1;
 output [7:0] myReg2;
@@ -170,7 +172,7 @@ always @(posedge clk) begin
 end
 
 
-registerInterface u_registerInterface(
+registerInterface_tca9539 u_registerInterface(
   .clk(clk),
   .addr(regAddr),
   .dataIn(dataToRegIF),
@@ -186,9 +188,10 @@ registerInterface u_registerInterface(
   .myReg7(myReg7)
 );
 
-serialInterface u_serialInterface (
+serialInterface_tca9539 u_serialInterface (
   .clk(clk), 
   .rst(rstSyncToClk | startEdgeDet), 
+  .deviceAddress(deviceAddress),
   .dataIn(dataFromRegIF), 
   .dataOut(dataToRegIF), 
   .writeEn(writeEn),

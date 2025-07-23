@@ -10,7 +10,7 @@ module tca9539(
         
 
     // I2C address selection
-    input a0, a1,
+    input [1:0] addr_sel,
 
     // IO
     inout [15:0] port
@@ -19,20 +19,20 @@ module tca9539(
     logic rst = ~reset_n;
 
     // I2C slave
-    logic [7:0] i2c_reg_addr, i2c_data_to_reg, i2c_data_from_reg;
-    logic [2:0] i2c_pin_addr;
-    logic i2c_wr_en, i2c_rd_en;
-
-    i2cSlave i2c_slave (
+    i2cSlave_tca9539 i2c_slave (
         .clk(clk),
         .rst(rst),
         .sda(sda),
         .scl(scl),
-        .regAddr(i2c_reg_addr),
-        .dataToRegIF(i2c_data_to_reg),
-        .writeEn(i2c_wr_en),
-        .dataFromRegIF(i2c_data_from_reg),
-        .pinAddress(i2c_pin_addr)
+        .deviceAddress({ 5'b11101, addr_sel }), // From Table 2
+        .myReg0(),
+        .myReg1(),
+        .myReg2(),
+        .myReg3(),
+        .myReg4(),
+        .myReg5(),
+        .myReg6(),
+        .myReg7()
     );
 
     // TCA9539 commands, see table 3 in datasheet
