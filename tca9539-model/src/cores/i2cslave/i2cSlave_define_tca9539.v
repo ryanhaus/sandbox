@@ -19,14 +19,14 @@
 // ------------- modify constants below this line -----------------
 // ----------------------------------------------------------------
 
-// i2c device address
-`define I2C_ADDRESS 7'h3c
+// i2c device address (Dynamically handled by TCA9539 address pins)
+//`define I2C_ADDRESS 7'h3c
 
 // System clock frequency in MHz
 // If you are using a clock frequency below 24MHz, then the macro
 // for SDA_DEL_LEN will result in compile errors for i2cSlave.v
 // you will need to hand tweak the SDA_DEL_LEN constant definition
-`define CLK_FREQ 48
+`define CLK_FREQ 48 // TODO
 
 // Debounce SCL and SDA over this many clock ticks
 // The rise time of SCL and SDA can be up to 1000nS (in standard mode)

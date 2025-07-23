@@ -47,7 +47,7 @@
 `include "i2cSlave_define_tca9539.v"
 
 
-module registerInterface (
+module registerInterface_tca9539 (
   clk,
   addr,
   dataIn,
