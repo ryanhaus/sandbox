@@ -51,14 +51,16 @@ module i2cSlave_tca9539 (
   sda,
   scl,
   deviceAddress,
-  myReg0,
-  myReg1,
-  myReg2,
-  myReg3,
-  myReg4,
-  myReg5,
-  myReg6,
-  myReg7
+
+  // registers (all 8-bit and r/w unless noted)
+  input_port_0, // readonly
+  input_port_1, // readonly
+  output_port_0,
+  output_port_1,
+  polarity_inversion_port_0,
+  polarity_inversion_port_1,
+  configuration_port_0,
+  configuration_port_1
 );
 
 input clk;
@@ -66,15 +68,11 @@ input rst;
 inout sda;
 input scl;
 input [7:0] deviceAddress;
-output [7:0] myReg0;
-output [7:0] myReg1;
-output [7:0] myReg2;
-output [7:0] myReg3;
-input [7:0] myReg4;
-input [7:0] myReg5;
-input [7:0] myReg6;
-input [7:0] myReg7;
 
+input  [7:0] input_port_0,              input_port_1;
+output [7:0] output_port_0,             output_port_1,
+             polarity_inversion_port_0, polarity_inversion_port_1,
+             configuration_port_0,      configuration_port_1;
 
 // local wires and regs
 reg sdaDeb;
@@ -178,14 +176,14 @@ registerInterface_tca9539 u_registerInterface(
   .dataIn(dataToRegIF),
   .writeEn(writeEn),
   .dataOut(dataFromRegIF),
-  .myReg0(myReg0),
-  .myReg1(myReg1),
-  .myReg2(myReg2),
-  .myReg3(myReg3),
-  .myReg4(myReg4),
-  .myReg5(myReg5),
-  .myReg6(myReg6),
-  .myReg7(myReg7)
+  .input_port_0(input_port_0),
+  .input_port_1(input_port_1),
+  .output_port_0(output_port_0),
+  .output_port_1(output_port_1),
+  .polarity_inversion_port_0(polarity_inversion_port_0),
+  .polarity_inversion_port_1(polarity_inversion_port_1),
+  .configuration_port_0(configuration_port_0),
+  .configuration_port_1(configuration_port_1)
 );
 
 serialInterface_tca9539 u_serialInterface (
