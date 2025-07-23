@@ -49,6 +49,7 @@
 
 module registerInterface_tca9539 (
   clk,
+  rst,
   addr,
   dataIn,
   writeEn,
@@ -65,6 +66,7 @@ module registerInterface_tca9539 (
   configuration_port_1
 );
 input clk;
+input rst;
 input [7:0] addr;
 input [7:0] dataIn;
 input writeEn;
@@ -97,7 +99,15 @@ end
 
 // --- I2C Write
 always @(posedge clk) begin
-  if (writeEn == 1'b1) begin
+  if (rst) begin
+    output_port_0 = 'hFF;
+    output_port_1 = 'hFF;
+    polarity_inversion_port_0 = 'h00;
+    polarity_inversion_port_1 = 'h00;
+    configuration_port_0 = 'hFF;
+    configuration_port_1 = 'hFF;
+  end
+  else if (writeEn == 1'b1) begin
     case (addr)
         8'h02: output_port_0 <= dataIn;
         8'h03: output_port_1 <= dataIn;
