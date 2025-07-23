@@ -42,7 +42,7 @@
 ////                                                              ////
 //////////////////////////////////////////////////////////////////////
 //
-`include "i2cSlave_define.v"
+`include "i2cSlave_define_tca9539.v"
 
 
 module i2cSlave (
