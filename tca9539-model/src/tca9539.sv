@@ -13,7 +13,7 @@ module tca9539(
     input [1:0] addr_sel,
 
     // IO
-    inout [15:0] port
+    inout [15:0] io_port 
 );
 
     logic rst = ~reset_n;
@@ -52,15 +52,15 @@ module tca9539(
     );
 
     // 'reg_input'
-    always_comb reg_input = port ^ reg_polarity_inversion;
+    always_comb reg_input = io_port ^ reg_polarity_inversion;
 
-    // 'port'
+    // 'io_port'
     logic [15:0] out_adj = reg_output ^ reg_polarity_inversion;
 
     generate
         for (genvar i = 0; i < 16; i++) begin
             // 1 -> input, 0 -> output
-            assign port[i] = (reg_configuration[i] == 'b1) ? 'bz : out_adj[i];
+            assign io_port[i] = (reg_configuration[i] == 'b1) ? 'bz : out_adj[i];
         end
     endgenerate
 
@@ -69,7 +69,7 @@ module tca9539(
         int_n = 'b1;
 
         for (int i = 0; i < 16; i++) begin
-            if (reg_configuration[i] == 'b1 && port[i] != reg_input[i]) begin
+            if (reg_configuration[i] == 'b1 && io_port[i] != reg_input[i]) begin
                 int_n = 'b0;
             end
         end
