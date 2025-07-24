@@ -1,8 +1,6 @@
 module tca9539(
     input clk,     // Clock should be faster than SCL
-
     input reset_n, // Reset (active low)
-    output logic int_n,  // Interrupt (active low)
 
     // I2C interface
     inout sda,
@@ -13,7 +11,9 @@ module tca9539(
     input [1:0] addr_sel,
 
     // IO
-    inout [15:0] io_port 
+    input [15:0] io_port_i,
+    output [15:0] io_port_o,
+    output [15:0] io_port_o_en
 );
 
     logic rst = ~reset_n;
@@ -52,27 +52,10 @@ module tca9539(
     );
 
     // 'reg_input'
-    always_comb reg_input = io_port ^ reg_polarity_inversion;
+    always_comb reg_input = io_port_i ^ reg_polarity_inversion;
 
-    // 'io_port'
-    logic [15:0] out_adj = reg_output ^ reg_polarity_inversion;
-
-    generate
-        for (genvar i = 0; i < 16; i++) begin
-            // 1 -> input, 0 -> output
-            assign io_port[i] = (reg_configuration[i] == 'b1) ? 'bz : out_adj[i];
-        end
-    endgenerate
-
-    // 'int_n'
-    always_comb begin
-        int_n = 'b1;
-
-        for (int i = 0; i < 16; i++) begin
-            if (reg_configuration[i] == 'b1 && io_port[i] != reg_input[i]) begin
-                int_n = 'b0;
-            end
-        end
-    end
+    // 'io_port_o', 'io_port_o_en'
+    assign io_port_o = reg_output ^ reg_polarity_inversion;
+    assign io_port_o_en = reg_configuration;
 
 endmodule
