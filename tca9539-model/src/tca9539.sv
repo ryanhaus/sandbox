@@ -3,8 +3,10 @@ module tca9539(
     input reset_n, // Reset (active low)
 
     // I2C interface
-    inout sda,
-    inout scl,
+    input scl,
+    input sda_i,
+    output sda_o,
+    output sda_o_en,
         
 
     // I2C address selection
@@ -38,7 +40,9 @@ module tca9539(
     i2cSlave_tca9539 i2c_slave (
         .clk(clk),
         .rst(rst),
-        .sda(sda),
+        .sda_i(sda_i),
+        .sda_o(sda_o),
+        .sda_o_en(sda_o_en),
         .scl(scl),
         .deviceAddress({ 5'b11101, addr_sel }), // From Table 2
         .input_port_0(input_port_0),

@@ -48,7 +48,9 @@
 module i2cSlave_tca9539 (
   clk,
   rst,
-  sda,
+  sda_i,
+  sda_o,
+  sda_o_en,
   scl,
   deviceAddress,
 
@@ -65,8 +67,10 @@ module i2cSlave_tca9539 (
 
 input clk;
 input rst;
-inout sda;
 input scl;
+input sda_i;
+output sda_o;
+output sda_o_en;
 input [7:0] deviceAddress;
 
 input  [7:0] input_port_0,              input_port_1;
@@ -94,8 +98,9 @@ reg [1:0] rstPipe;
 wire rstSyncToClk;
 reg startEdgeDet;
 
-assign sda = (sdaOut == 1'b0) ? 1'b0 : 1'bz;
-assign sdaIn = sda;
+assign sda_i = sdaIn;
+assign sda_o = 'b0;
+assign sda_o_en = sdaOut;
 
 // sync rst rsing edge to clk
 always @(posedge clk) begin
