@@ -36,6 +36,12 @@ module tca9539(
                  reg_polarity_inversion = { polarity_inversion_port_1, polarity_inversion_port_0 },
                  reg_configuration      = { configuration_port_1,      configuration_port_0      };
 
+    initial begin
+        reg_output = 'hFFFF;
+        reg_polarity_inversion = 'h0000;
+        reg_configuration = 'hFFFF;
+    end
+
     // I2C slave
     i2cSlave_tca9539 i2c_slave (
         .clk(clk),
