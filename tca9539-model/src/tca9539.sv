@@ -18,12 +18,12 @@ module tca9539(
     output [15:0] io_port_o_en
 );
 
-    logic rst = ~reset_n;
+    wire rst = ~reset_n;
 
     // TCA9539 internal registers, table 3
     logic [7:0] input_port_0,
-                input_port_1,
-                output_port_0,
+                input_port_1;
+    wire  [7:0] output_port_0,
                 output_port_1,
                 polarity_inversion_port_0,
                 polarity_inversion_port_1,
@@ -31,16 +31,10 @@ module tca9539(
                 configuration_port_1;
 
     // 8x 8-bit registers -> 4x 16-bit registers
-    logic [15:0] reg_input              = { input_port_1,              input_port_0              },
-                 reg_output             = { output_port_1,             output_port_0             },
+    logic [15:0] reg_input              = { input_port_1,              input_port_0              };
+    wire  [15:0] reg_output             = { output_port_1,             output_port_0             },
                  reg_polarity_inversion = { polarity_inversion_port_1, polarity_inversion_port_0 },
                  reg_configuration      = { configuration_port_1,      configuration_port_0      };
-
-    initial begin
-        reg_output = 'hFFFF;
-        reg_polarity_inversion = 'h0000;
-        reg_configuration = 'hFFFF;
-    end
 
     // I2C slave
     i2cSlave_tca9539 i2c_slave (
@@ -66,6 +60,6 @@ module tca9539(
 
     // 'io_port_o', 'io_port_o_en'
     assign io_port_o = reg_output ^ reg_polarity_inversion;
-    assign io_port_o_en = reg_configuration;
+    assign io_port_o_en = ~reg_configuration;
 
 endmodule
