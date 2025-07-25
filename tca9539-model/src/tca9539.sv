@@ -6,16 +6,16 @@ module tca9539(
     input scl,
     input sda_i,
     output sda_o,
-    output sda_o_en,
+    output sda_oe_n, // SDA enable (active low)
         
 
     // I2C address selection
-    input [1:0] addr_sel,
+    input [1:0] addr_sel, // sets bottom 2 bits of I2C address, base is 0x74
 
     // IO
     input [15:0] io_port_i,
     output [15:0] io_port_o,
-    output [15:0] io_port_o_en
+    output [15:0] io_port_oe // signifies which bits in io_port_o are valid, active high
 );
 
     wire rst = ~reset_n;
@@ -42,7 +42,7 @@ module tca9539(
         .rst(rst),
         .sda_i(sda_i),
         .sda_o(sda_o),
-        .sda_o_en(sda_o_en),
+        .sda_oe_n(sda_oe_n),
         .scl(scl),
         .deviceAddress({ 5'b11101, addr_sel }), // From Table 2
         .input_port_0(input_port_0),
@@ -58,8 +58,8 @@ module tca9539(
     // 'reg_input'
     always_comb reg_input = io_port_i ^ reg_polarity_inversion;
 
-    // 'io_port_o', 'io_port_o_en'
+    // 'io_port_o', 'io_port_oe'
     assign io_port_o = reg_output ^ reg_polarity_inversion;
-    assign io_port_o_en = ~reg_configuration;
+    assign io_port_oe = ~reg_configuration;
 
 endmodule
