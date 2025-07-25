@@ -57,7 +57,7 @@
 
 module serialInterface_tca9539 (clearStartStopDet, clk, deviceAddress, dataIn, dataOut, regAddr, rst, scl, sdaIn, sdaOut, startStopDetState, writeEn);
 input   clk;
-input   [7:0]deviceAddress;
+input   [6:0]deviceAddress;
 input   [7:0]dataIn;
 input   rst;
 input   scl;

@@ -71,7 +71,7 @@ input scl;
 input sda_i;
 output sda_o;
 output sda_oe_n;
-input [7:0] deviceAddress;
+input [6:0] deviceAddress;
 
 input  [7:0] input_port_0,              input_port_1;
 output [7:0] output_port_0,             output_port_1,
