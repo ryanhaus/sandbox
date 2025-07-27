@@ -1386,6 +1386,42 @@
 			(embedded_fonts no)
 		)
 	)
+	(text "LIN Transceiver"
+		(exclude_from_sim no)
+		(at 244.094 70.358 0)
+		(effects
+			(font
+				(size 2.54 2.54)
+				(thickness 0.508)
+				(bold yes)
+			)
+		)
+		(uuid "2b7766d2-8e4b-44d3-9e71-7ebb99aadaef")
+	)
+	(text "CAN Transceiver"
+		(exclude_from_sim no)
+		(at 56.896 70.866 0)
+		(effects
+			(font
+				(size 2.54 2.54)
+				(thickness 0.508)
+				(bold yes)
+			)
+		)
+		(uuid "341572c9-232f-4c70-bc07-bff4e0f08088")
+	)
+	(text "Microcontroller"
+		(exclude_from_sim no)
+		(at 155.448 50.038 0)
+		(effects
+			(font
+				(size 2.54 2.54)
+				(thickness 0.508)
+				(bold yes)
+			)
+		)
+		(uuid "df7ee0d1-a9ae-4cd6-81ce-72c711e0cef9")
+	)
 	(junction
 		(at 154.94 123.19)
 		(diameter 0)
