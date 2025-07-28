@@ -21,17 +21,20 @@ module tca9539(
     wire rst = ~reset_n;
 
     // TCA9539 internal registers, table 3
-    logic [7:0] input_port_0,
-                input_port_1;
-    wire  [7:0] output_port_0,
-                output_port_1,
-                polarity_inversion_port_0,
-                polarity_inversion_port_1,
-                configuration_port_0,
-                configuration_port_1;
+    wire [7:0] input_port_0,
+               input_port_1,
+               output_port_0,
+               output_port_1,
+               polarity_inversion_port_0,
+               polarity_inversion_port_1,
+               configuration_port_0,
+               configuration_port_1;
 
     // 8x 8-bit registers -> 4x 16-bit registers
-    logic [15:0] reg_input              = { input_port_1,              input_port_0              };
+    logic [15:0] reg_input;
+    assign input_port_0 = reg_input[7:0];
+    assign input_port_1 = reg_input[15:8];
+
     wire  [15:0] reg_output             = { output_port_1,             output_port_0             },
                  reg_polarity_inversion = { polarity_inversion_port_1, polarity_inversion_port_0 },
                  reg_configuration      = { configuration_port_1,      configuration_port_0      };
