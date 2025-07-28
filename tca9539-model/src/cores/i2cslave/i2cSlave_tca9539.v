@@ -98,7 +98,7 @@ reg [1:0] rstPipe;
 wire rstSyncToClk;
 reg startEdgeDet;
 
-assign sda_i = sdaIn;
+assign sdaIn = sda_i;
 assign sda_o = 'b0;
 assign sda_oe_n = sdaOut;
 
