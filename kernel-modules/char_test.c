@@ -102,8 +102,17 @@ static ssize_t device_read(struct file *filp, char __user *buf, size_t count, lo
 
 static ssize_t device_write(struct file *filp, const char __user *buf, size_t count, loff_t *f_pos)
 {
-    pr_info("Write: %s\n", buf);
-    return -EINVAL;
+    if (*f_pos > 64) return count; // ignore bytes after byte 64
+    count = min(count, 64) - *f_pos;
+
+    memset(string, 0, 64);
+    copy_from_user(string, &buf[*f_pos], count);
+
+    string[63] = 0; // ensure at least one 0 exists
+
+    *f_pos += count;
+
+    return count;
 }
 
 module_init(chardev_init);
