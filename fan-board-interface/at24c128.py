@@ -19,8 +19,6 @@ def eeprom_write(addr, data=[], n_bytes=-1):
         eeprom_write(addr, data[0:64])
         eeprom_write(addr + 64, data[64:])
         return
-    
-    print(f"Writing to 0x{addr:04X}")
 
     addr_low = addr & 0xFF
     addr_high = (addr & 0xFF00) >> 8
