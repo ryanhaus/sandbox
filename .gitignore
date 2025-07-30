@@ -44,3 +44,27 @@ fp-info-cache
 *.log
 *.raw
 .svg2shenzhen-cache
+
+# VIVADO
+.Xil
+vivado*
+xvlog.pb
+.ngc2ver*
+*.wcfg
+*.cache
+*.hw
+*.ip_user_files
+*.sim
+*.srcs
+
+# C
+*.o
+
+# KERNEL MODULES
+*.mod
+*.mod.c
+*.ko
+kernel-modules/*.cmd
+kernel-modules/*.d
+modules.order
+Module.symvers
