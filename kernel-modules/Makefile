@@ -1,5 +1,5 @@
 ifneq ($(KERNELRELEASE),)
-	obj-m := hello.o char_test.o
+	obj-m := hello.o char_test.o addition.o
 else
 	KERNELDIR ?= /lib/modules/$(shell uname -r)/build
 	PWD := $(shell pwd)
