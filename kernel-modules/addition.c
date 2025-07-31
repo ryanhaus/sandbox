@@ -20,7 +20,7 @@ static ssize_t device_read(struct file *, char __user *, size_t, loff_t *);
 static ssize_t device_write(struct file *, const char __user *, size_t, loff_t *);
 
 static int major;
-static int sum = 0x1234;
+static int sum = 0;
  
 enum {
     CDEV_NOT_USED = 0,
@@ -91,14 +91,13 @@ static ssize_t device_read(struct file *filp, char __user *buf, size_t count, lo
     {
         int x = sum;
         int i = 0;
-        while (x > 0)
-        {
+        do {
             int digit = x & 0xF;
             char c = digit < 10 ? '0' + digit : 'A' + digit;
             str[i++] = c;
 
             x >>= 4;
-        }
+        } while (x > 0);
 
         str[i] = 0;
     }
