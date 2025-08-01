@@ -1,3 +1,6 @@
 [submodule "updi-phy-test/updi-fpga"]
 	path = updi-phy-test/updi-fpga
 	url = http://github.com/ryanhaus/updi-fpga
+[submodule "i2c-eeprom-sim/cores/verilog-i2c"]
+	path = i2c-eeprom-sim/cores/verilog-i2c
+	url = https://github.com/alexforencich/verilog-i2c
