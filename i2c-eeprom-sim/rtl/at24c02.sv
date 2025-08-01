@@ -15,7 +15,19 @@ module at24c02 #(
     output sda_oe
 );
 
+    // EEPROM data
     logic [7:0] data [EEPROM_SIZE_BYTES];
+
+    // I2C Slave signals
+    logic [7:0] i2c_s_tdata,  i2c_m_tdata;
+    logic       i2c_s_tvalid, i2c_m_tvalid,
+                i2c_s_tready, i2c_m_tready,
+                i2c_s_tlast,  i2c_m_tlast;
+
+    logic [6:0] i2c_address;
+    logic i2c_busy, i2c_active;
+
+
 
     always_ff @(posedge clk) begin
         if (rst) begin
@@ -29,15 +41,6 @@ module at24c02 #(
 
 
 
-    // I2C Slave
-    logic [7:0] i2c_s_tdata,  i2c_m_tdata;
-    logic       i2c_s_tvalid, i2c_m_tvalid,
-                i2c_s_tready, i2c_m_tready,
-                i2c_s_tlast,  i2c_m_tlast;
-
-    logic [6:0] i2c_address;
-    logic i2c_busy, i2c_active;
-    
     i2c_slave i2c_slave_inst (
         .clk(clk),
         .rst(rst),
