@@ -3133,6 +3133,16 @@
 	)
 	(wire
 		(pts
+			(xy 76.2 147.32) (xy 76.2 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "49893613-2143-4828-a96e-d20af18277d2")
+	)
+	(wire
+		(pts
 			(xy 113.03 90.17) (xy 113.03 92.71)
 		)
 		(stroke
@@ -3420,6 +3430,16 @@
 			(type default)
 		)
 		(uuid "ad3c6dc6-717c-4308-9c54-f2ec1da01c51")
+	)
+	(wire
+		(pts
+			(xy 76.2 154.94) (xy 76.2 157.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ae3d349c-9d7a-40b0-a715-7244691c66cb")
 	)
 	(wire
 		(pts
@@ -4215,6 +4235,72 @@
 			(project ""
 				(path "/d5aaab65-b0a5-472e-8b3a-9378b5d7faec"
 					(reference "IC1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 76.2 157.48 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "060505c7-206d-48c5-aa07-775b38af95a2")
+		(property "Reference" "#PWR023"
+			(at 76.2 163.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 76.2 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 76.2 157.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 76.2 157.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 76.2 157.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "87854e02-4215-49aa-925c-cae12a424aa1")
+		)
+		(instances
+			(project "can-lin-bridge"
+				(path "/d5aaab65-b0a5-472e-8b3a-9378b5d7faec"
+					(reference "#PWR023")
 					(unit 1)
 				)
 			)
@@ -6969,6 +7055,142 @@
 			(project "can-lin-bridge"
 				(path "/d5aaab65-b0a5-472e-8b3a-9378b5d7faec"
 					(reference "R2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C_Small")
+		(at 76.2 152.4 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b925854c-c478-45eb-8436-eb34c0018ccd")
+		(property "Reference" "C5"
+			(at 78.74 151.1362 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "4u7"
+			(at 78.74 153.6762 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 76.2 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 76.2 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 76.2 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "1518fbcc-4f71-4f5c-91ea-6dbd45b6eb1d")
+		)
+		(pin "2"
+			(uuid "17e49bd0-9184-4034-945a-18f1557978f6")
+		)
+		(instances
+			(project "can-lin-bridge"
+				(path "/d5aaab65-b0a5-472e-8b3a-9378b5d7faec"
+					(reference "C5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+5V")
+		(at 76.2 147.32 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "d5b8d353-2a54-4689-9518-52623a6d56e4")
+		(property "Reference" "#PWR022"
+			(at 76.2 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+5V"
+			(at 76.2 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 76.2 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 76.2 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+5V\""
+			(at 76.2 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "2329ba94-1ddb-4667-9bd1-2fb0a6f51b6d")
+		)
+		(instances
+			(project "can-lin-bridge"
+				(path "/d5aaab65-b0a5-472e-8b3a-9378b5d7faec"
+					(reference "#PWR022")
 					(unit 1)
 				)
 			)
