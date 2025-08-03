@@ -25,20 +25,29 @@ module video_timing_gen #(
     input clk,
     input rst,
 
+    // generated timing signals
     output logic dotclk,
     output logic hsync,
     output logic vsync,
     
-    output logic [HORIZONTAL_CTR_BITS-1 : 0] ctr_h,
-    output logic [VERTICAL_CTR_BITS-1 : 0] ctr_v
+    // current position in display
+    output logic [HORIZONTAL_CTR_BITS-1 : 0] pos_h,
+    output logic [VERTICAL_CTR_BITS-1 : 0] pos_v,
+
+    output logic active // is current position in display region?
 );
 
-    // timing signal generation logic
     logic [CLK_DIV_CTR_BITS-1 : 0] ctr_clkdiv;
+    logic [HORIZONTAL_CTR_BITS-1 : 0] ctr_h;
+    logic [VERTICAL_CTR_BITS-1 : 0] ctr_v;
+
     logic [CLK_DIV_CTR_BITS-1 : 0] next_ctr_clkdiv;
     logic [HORIZONTAL_CTR_BITS-1 : 0] next_ctr_h;
     logic [VERTICAL_CTR_BITS-1 : 0] next_ctr_v;
 
+    logic h_active, v_active;
+
+    // timing signal generation logic
     always_ff @(posedge clk) begin
         if (rst) begin
             ctr_clkdiv <= 'b0;
@@ -80,6 +89,15 @@ module video_timing_gen #(
         // figure out what hsync and vsync should be
         hsync = (ctr_h >= PERIOD_HSYNC);
         vsync = (ctr_v >= PERIOD_VSYNC);
+
+        // offset ctr_h and ctr_v to get the current display position
+        pos_h = ctr_h - (PERIOD_HSYNC + PERIOD_HBP);
+        pos_v = ctr_v - (PERIOD_VSYNC + PERIOD_VBP);
+
+        // generate the 'active' signal
+        h_active = (ctr_h >= (PERIOD_HSYNC + PERIOD_HBP)) && (ctr_h < (PERIOD_HSYNC + PERIOD_HBP + PERIOD_HACTIVE));
+        v_active = (ctr_v >= (PERIOD_VSYNC + PERIOD_VBP)) && (ctr_v < (PERIOD_VSYNC + PERIOD_VBP + PERIOD_VACTIVE));
+        active = h_active && v_active;
     end
 
 endmodule
