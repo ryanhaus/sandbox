@@ -25,7 +25,7 @@ module at24c02 #(
     logic i2c_s_tvalid, i2c_m_tvalid,
           i2c_s_tready, i2c_m_tready,
           i2c_s_tlast, i2c_m_tlast;
-    logic i2c_release_bus;
+    logic i2c_release_bus, i2c_addressed;
 
 
 
@@ -54,7 +54,7 @@ module at24c02 #(
 
         .busy(),
         .bus_address(),
-        .bus_addressed(),
+        .bus_addressed(i2c_addressed),
         .bus_active(),
 
         .enable('b1),
@@ -79,7 +79,8 @@ module at24c02 #(
         IDLE,
         RECV_ADDR_H,
         RECV_ADDR_L,
-        ACTIVE
+        ACTIVE,
+        STOP
     } i2c_eeprom_state;
 
     i2c_eeprom_state state;
@@ -90,19 +91,27 @@ module at24c02 #(
         end
         else begin
             case (state)
-                IDLE: if (i2c_m_tvalid) state <= RECV_ADDR_H;
+                IDLE:
+                    if (i2c_addressed)
+                        state <= RECV_ADDR_H;
 
-                RECV_ADDR_H: begin
-                    eeprom_addr[10:8] <= i2c_m_tdata[2:0];
-                    state <= RECV_ADDR_L;
-                end
+                RECV_ADDR_H:
+                    if (i2c_m_tvalid) begin
+                        eeprom_addr[10:8] <= i2c_m_tdata[2:0];
+                        state <= RECV_ADDR_L;
+                    end
 
-                RECV_ADDR_L: begin
-                    eeprom_addr[7:0] <= i2c_m_tdata;
-                    state <= ACTIVE;
-                end
+                RECV_ADDR_L:
+                    if (i2c_m_tvalid) begin
+                        eeprom_addr[7:0] <= i2c_m_tdata;
+                        state <= ACTIVE;
+                    end
 
-                ACTIVE: if (i2c_m_tlast) state <= IDLE;
+                ACTIVE:
+                    if (i2c_m_tlast)
+                        state <= STOP;
+
+                STOP: state <= IDLE;
             endcase
         end
     end
@@ -115,8 +124,6 @@ module at24c02 #(
         i2c_s_tlast = 'b0;
 
         case (state)
-            IDLE: i2c_release_bus = 'b1;
-
             ACTIVE: begin
                 // for reads
                 i2c_s_tdata = eeprom_dout;
@@ -127,6 +134,8 @@ module at24c02 #(
                 eeprom_din = i2c_m_tdata;
                 eeprom_we = i2c_m_tvalid;
             end
+            
+            STOP: i2c_release_bus = 'b1;
         endcase
     end
 

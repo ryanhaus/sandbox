@@ -1,6 +1,17 @@
-module at24c02_ctl (
+module at24c02_ctl # (
+    parameter SLAVE_ADDR = 7'h50
+) (
     input clk,
     input rst,
+
+    // Control interface (AXIS-like)
+    input [10:0] address,    // address of the first byte to read from/write to
+    input [7:0] din,         // input data (to writes)
+    output logic [7:0] dout, // output data (from reads)
+    input wr_en,             // selects the direction of the tranfers, 0 = read, 1 = write
+    output logic valid,      // signifies that this module is ready for a transfer to occur
+    input ready,             // signifies that parent module is ready for a transfer to occur
+    input last,              // signifies that this transfer will be the last of this sequence
 
     // I2C interface
     input scl_i,
@@ -11,6 +22,10 @@ module at24c02_ctl (
     output sda_o,
     output sda_oe
 );
+
+    // Control signals
+    logic [10:0] cur_address;
+    logic cur_wr_en;
 
     // I2C master signals
     logic [6:0] cmd_address;
@@ -55,10 +70,10 @@ module at24c02_ctl (
 
         .scl_i(scl_i),
         .scl_o(scl_o),
-        .scl_oe(scl_t),
+        .scl_t(scl_oe),
         .sda_i(sda_i),
         .sda_o(sda_o),
-        .sda_oe(sda_t),
+        .sda_t(sda_oe),
 
         .busy(),
         .bus_control(),
@@ -70,37 +85,100 @@ module at24c02_ctl (
     );
 
     // Control state machine
-    int counter;
+    typedef enum {
+        IDLE,
+        SETUP_WR_ADDR,
+        WR_ADDR_H,
+        WR_ADDR_L,
+        WRITE,
+        READ
+    } ctl_state;
+
+    ctl_state state;
 
     always_ff @(posedge clk) begin
         if (rst) begin
-            counter <= 0;
+            state <= IDLE;
         end
         else begin
-            if (cmd_ready && s_tready) begin
-                counter <= counter + 1;
-            end
+            case (state)
+                // wait until ready signal
+                IDLE:
+                    if (ready) begin
+                        state <= SETUP_WR_ADDR;
+                        cur_address <= address;
+                        cur_wr_en <= wr_en;
+                    end
+
+                // wait until a transfer has occured with I2C master ctrl if
+                SETUP_WR_ADDR:
+                    if (cmd_ready)
+                        state <= WR_ADDR_H;
+                // 
+                WR_ADDR_H:
+                    if (s_tready)
+                        state <= WR_ADDR_L;
+
+                WR_ADDR_L:
+                    if (s_tready)
+                        state <= cur_wr_en ? WRITE : READ;
+
+                WRITE:
+                    if (last)
+                        state <= IDLE;
+                    else if (s_tready)
+                        cur_address <= cur_address + 'b1;
+
+                READ:
+                    if (last)
+                        state <= IDLE;
+                    else if (s_tready)
+                        cur_address <= cur_address + 'b1;
+            endcase
         end
     end
 
     always_comb begin
-        cmd_address = 'h50;
+        // Module control interface
+        valid = 'b0;
+
+        // I2C master command interface
+        cmd_address = SLAVE_ADDR;
         cmd_start = 'b0;
         cmd_read = 'b0;
         cmd_write = 'b0;
         cmd_write_multiple = 'b0;
         cmd_stop = 'b0;
         cmd_valid = 'b0;
-        cmd_ready = 'b0;
 
+        // I2C master data interface
         s_tdata = 'b0;
-        m_tvalid = 'b0;
+        s_tvalid = 'b0;
         m_tready = 'b0;
-        m_tlast = 'b0;
+        s_tlast = 'b0;
 
-        case (counter)
-            0: begin
-                
+        case (state)
+            IDLE: valid = 'b1;
+
+            // write to command interface to expect a multiple byte write
+            SETUP_WR_ADDR: begin
+                cmd_start = 'b1;
+                cmd_write_multiple = 'b1;
+                cmd_valid = 'b1;
+                cmd_stop = 'b1;
+            end
+
+            // write the high byte of the EEPROM address out
+            WR_ADDR_H: begin
+                s_tdata = { 5'b0, cur_address[10:8] };
+                s_tvalid = 'b1;
+            end
+
+            // write the low byte of the EEPROM address out
+            WR_ADDR_L: begin
+                s_tdata = cur_address[7:0];
+                s_tvalid = 'b1;
+                s_tlast = 'b1;
             end
         endcase
     end
