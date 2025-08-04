@@ -6,11 +6,11 @@ module at24c02_ctl # (
 
     // Control interface (AXIS-like)
     input [10:0] address,    // address of the first byte to read from/write to
-    input [7:0] din,         // input data (to writes)
-    output logic [7:0] dout, // output data (from reads)
+    input [7:0] din,         // input data (for writes)
+    output logic [7:0] dout, // output data (for reads)
     input wr_en,             // selects the direction of the tranfers, 0 = read, 1 = write
-    output logic valid,      // signifies that this module is ready for a transfer to occur
-    input ready,             // signifies that parent module is ready for a transfer to occur
+    output logic ready,  // signifies that this module is ready for a transfer to occur
+    input parent_ready,      // signifies that parent module is ready for a transfer to occur
     input last,              // signifies that this transfer will be the last of this sequence
 
     // I2C interface
@@ -91,10 +91,12 @@ module at24c02_ctl # (
         WR_ADDR_H,
         WR_ADDR_L,
         WRITE,
+        SETUP_RD,
         READ
     } ctl_state;
 
     ctl_state state;
+    logic is_last;
 
     always_ff @(posedge clk) begin
         if (rst) begin
@@ -104,43 +106,60 @@ module at24c02_ctl # (
             case (state)
                 // wait until ready signal
                 IDLE:
-                    if (ready) begin
+                    if (parent_ready) begin
                         state <= SETUP_WR_ADDR;
                         cur_address <= address;
                         cur_wr_en <= wr_en;
+                        is_last <= 'b0;
                     end
 
                 // wait until a transfer has occured with I2C master ctrl if
                 SETUP_WR_ADDR:
                     if (cmd_ready)
                         state <= WR_ADDR_H;
-                // 
+
+                // wait until a byte is able to be written out
                 WR_ADDR_H:
                     if (s_tready)
                         state <= WR_ADDR_L;
 
+                // wait until a byte is able to be written out
                 WR_ADDR_L:
                     if (s_tready)
-                        state <= cur_wr_en ? WRITE : READ;
+                        state <= cur_wr_en ? WRITE : SETUP_RD;
 
+                // loop until 'last' signal
                 WRITE:
-                    if (last)
-                        state <= IDLE;
-                    else if (s_tready)
-                        cur_address <= cur_address + 'b1;
+                    if (s_tready) begin
+                        // 'is_last' is 'last' delayed by one byte time so
+                        // that the last byte actually gets transferred
+                        is_last <= last;
+                        if (is_last)
+                            state <= IDLE;
+                    end
 
+                // wait until a transfer has occured with I2C master ctrl if
+                SETUP_RD:
+                    if (cmd_ready)
+                        state <= READ;
+
+                // loop until 'last' signal
                 READ:
-                    if (last)
-                        state <= IDLE;
-                    else if (s_tready)
-                        cur_address <= cur_address + 'b1;
+                    if (s_tready) begin
+                        // 'is_last' is 'last' delayed by one byte time so
+                        // that the last byte actually gets transferred
+                        is_last <= last;
+                        if (is_last)
+                            state <= IDLE;
+                    end
             endcase
         end
     end
 
     always_comb begin
         // Module control interface
-        valid = 'b0;
+        ready = 'b0;
+        dout = 'b0;
 
         // I2C master command interface
         cmd_address = SLAVE_ADDR;
@@ -158,14 +177,19 @@ module at24c02_ctl # (
         s_tlast = 'b0;
 
         case (state)
-            IDLE: valid = 'b1;
+            IDLE: ready = 'b1;
 
             // write to command interface to expect a multiple byte write
             SETUP_WR_ADDR: begin
                 cmd_start = 'b1;
                 cmd_write_multiple = 'b1;
                 cmd_valid = 'b1;
-                cmd_stop = 'b1;
+
+                // a read should have no stop between writing the address and
+                // reading bytes, whereas write should since it's all one
+                // transaction
+                if (cur_wr_en)
+                    cmd_stop = 'b1;
             end
 
             // write the high byte of the EEPROM address out
@@ -178,7 +202,29 @@ module at24c02_ctl # (
             WR_ADDR_L: begin
                 s_tdata = cur_address[7:0];
                 s_tvalid = 'b1;
-                s_tlast = 'b1;
+            end
+
+            // write out input byte
+            WRITE: begin
+                s_tdata = din;
+                s_tvalid = 'b1;
+                ready = s_tready;
+                s_tlast = last;
+            end
+
+            // write to command interface to expect a read
+            SETUP_RD: begin
+                cmd_read = 'b1;
+                cmd_stop = 'b1;
+                cmd_valid = 'b1;
+            end
+
+            // read to output byte
+            READ: begin
+                dout = m_tdata;
+                s_tvalid = parent_ready;
+                ready = s_tready;
+                s_tlast = last;
             end
         endcase
     end

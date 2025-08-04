@@ -7,7 +7,7 @@ module at24c02_ctl_tb();
 
     logic [10:0] eeprom_addr;
     logic [7:0] eeprom_din, eeprom_dout;
-    logic eeprom_wr_en, ctl_valid, ctl_ready, ctl_last;
+    logic eeprom_wr_en, ctl_parent_ready, ctl_module_ready, ctl_last;
 
     at24c02 #(.I2C_ADDR(AT_I2C_ADDR)) at24c02_inst (
         .clk(clk),
@@ -30,8 +30,8 @@ module at24c02_ctl_tb();
         .din(eeprom_din),
         .dout(eeprom_dout),
         .wr_en(eeprom_wr_en),
-        .valid(ctl_valid),
-        .ready(ctl_ready),
+        .ready(ctl_module_ready),
+        .parent_ready(ctl_parent_ready),
         .last(ctl_last),
 
 
@@ -47,8 +47,11 @@ module at24c02_ctl_tb();
 
     initial begin
         // reset & clk forever
-        clk = 0;
+        clk = 1;
         rst = 1;
+
+        #10
+        clk = 0;
 
         #10
         clk = 1;
@@ -65,18 +68,30 @@ module at24c02_ctl_tb();
         eeprom_addr = 'b0;
         eeprom_din = 'b0;
         eeprom_wr_en = 'b0;
-        ctl_ready = 'b0;
+        ctl_parent_ready = 'b0;
         ctl_last = 'b0;
 
         #100
 
         // test 1: write to eeprom
+        // write EEPROM data address & first byte, and wait to finish
         eeprom_addr = 'h123;
-        eeprom_din = 'h45;
+        eeprom_din = 'hF0;
         eeprom_wr_en = 'b1;
-        ctl_ready = 'b1;
+        ctl_parent_ready = 'b1;
+        do #20; while(!ctl_module_ready);
 
-        while (!ctl_valid) #10;
+        // write some more bytes out
+        for (int i = 1; i < 15; i++) begin
+            eeprom_din = { 4'hF, i[3:0] };
+            do #20; while(!ctl_module_ready);
+        end
+
+        eeprom_din = 'hFF;
+        ctl_last = 'b1;
+        #20 ctl_parent_ready = 'b0;
+
+        do #20; while(!ctl_module_ready);
     end
 
 

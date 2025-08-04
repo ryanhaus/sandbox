@@ -107,9 +107,16 @@ module at24c02 #(
                         state <= ACTIVE;
                     end
 
-                ACTIVE:
+                ACTIVE: begin
                     if (i2c_m_tlast)
                         state <= STOP;
+                    else if (i2c_m_tvalid || i2c_s_tready) begin
+                        // increase address pointer with every transaction
+                        // i2c_m_tvalid == 1 --> a write has occurred
+                        // i2c_s_tready == 1 --> a read has occurred
+                        eeprom_addr <= eeprom_addr + 'b1;
+                    end
+                end
 
                 STOP: state <= IDLE;
             endcase
@@ -123,12 +130,14 @@ module at24c02 #(
         i2c_m_tready = 'b1; // nothing ever blocks, so always ready
         i2c_s_tlast = 'b0;
 
+        eeprom_din = 'b0;
+        eeprom_we = 'b0;
+
         case (state)
             ACTIVE: begin
                 // for reads
                 i2c_s_tdata = eeprom_dout;
                 i2c_s_tvalid = 'b1;
-
 
                 // for writes
                 eeprom_din = i2c_m_tdata;
