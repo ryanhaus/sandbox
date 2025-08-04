@@ -5,4 +5,5 @@ edition = "2024"
 
 [dependencies]
 marlin = { version = "0.7.1", features = ["verilog"] }
+minifb = "0.28.0"
 snafu = "0.8.6"
