@@ -1,3 +1,6 @@
+/*
+ * Testbench for at24c02 and at24c02_ctl modules.
+ */
 module at24c02_ctl_tb();
 
     localparam AT_I2C_ADDR = 7'h50;

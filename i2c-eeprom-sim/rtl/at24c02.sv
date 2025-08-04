@@ -1,3 +1,26 @@
+/*
+ * Simulation model of the AT24C02 I2C EEPROM chip.
+ * Author: Ryan Hausmann
+ *
+ * This module is dependent on:
+ *   - verilog-i2c: https://github.com/alexforencich/verilog-i2c (MIT license)
+ *
+ * See datasheet: https://ww1.microchip.com/downloads/en/DeviceDoc/doc0180.pdf
+ *
+ * Limitations and differences from hardware:
+ *   - Does not simulate pages, so any amount of bytes can be written to any
+ *     address and it will not behave exactly like the hardware if the page
+ *     boundaries are violated. See "PAGE WRITE" section in datasheet on pg
+ *     9. TODO: simulate pages?
+ *
+ *   - The I2C address is configurable with the module parameter I2C_ADDR
+ *     instead of using dedicated hardware pins.
+ *
+ *   - The write protection (WP) pin is omitted.
+ *
+ *   - There are no default values (although, this can be solved by using
+ *     $readmemh or something to read from a file).
+ */
 module at24c02 #(
     parameter I2C_ADDR = 7'h50
 ) (

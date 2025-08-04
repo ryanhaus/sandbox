@@ -1,3 +1,12 @@
+/*
+ * Controller module for the AT24C02 I2C EEPROM chip.
+ * Author: Ryan Hausmann
+ *
+ * This module is dependent on:
+ *   - verilog-i2c: https://github.com/alexforencich/verilog-i2c (MIT license)
+ *
+ * See datasheet: https://ww1.microchip.com/downloads/en/DeviceDoc/doc0180.pdf
+ */
 module at24c02_ctl # (
     parameter SLAVE_ADDR = 7'h50
 ) (
