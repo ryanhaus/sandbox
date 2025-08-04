@@ -19,8 +19,8 @@ module video_timing_gen #(
     localparam PERIOD_VERTICAL = PERIOD_VSYNC + PERIOD_VBP + PERIOD_VACTIVE + PERIOD_VFP,
 
     localparam CLK_DIV_CTR_BITS = $clog2(DOTCLK_DIV),
-    parameter HORIZONTAL_CTR_BITS = $clog2(PERIOD_HORIZONTAL),
-    parameter VERTICAL_CTR_BITS = $clog2(PERIOD_VERTICAL)
+    parameter HORIZONTAL_CTR_BITS = 9, // $clog2(PERIOD_HORIZONTAL),
+    parameter VERTICAL_CTR_BITS = 9 // $clog2(PERIOD_VERTICAL)
 ) (
     input clk,
     input rst,
@@ -31,8 +31,8 @@ module video_timing_gen #(
     output logic vsync,
     
     // current position in display
-    output logic [HORIZONTAL_CTR_BITS-1 : 0] pos_h,
-    output logic [VERTICAL_CTR_BITS-1 : 0] pos_v,
+    output logic [8 : 0] pos_h,
+    output logic [8 : 0] pos_v,
 
     output logic active // is current position in display region?
 );

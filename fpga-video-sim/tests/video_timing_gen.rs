@@ -1,5 +1,6 @@
 use marlin::{
-    verilator::{VerilatedModelConfig, VerilatorRuntime, VerilatorRuntimeOptions},
+    verilator::{VerilatedModelConfig, VerilatorRuntime, VerilatorRuntimeOptions, AsVerilatedModel},
+    verilator::vcd::Vcd,
     verilog::prelude::*,
 };
 use snafu::Whatever;
@@ -7,31 +8,49 @@ use snafu::Whatever;
 #[verilog(src="src/rtl/video_timing_gen.sv", name="video_timing_gen")]
 struct VideoTimingGen;
 
-const MAX_SIM_TIME: u32 = 1_000_000;
+macro_rules! setup_runtime {
+    () => {{
+        VerilatorRuntime::new(
+            "artifacts".into(),
+            &["src/rtl/video_timing_gen.sv".as_ref()],
+            &["src/rtl".into()],
+            [],
+            VerilatorRuntimeOptions::default_logging(),
+        )?
+    }};
+}
+
+macro_rules! reset_top_module {
+    ($top:ident) => {
+        $top.clk = 0;
+        $top.rst = 1;
+        $top.eval();
+
+        $top.clk = 1;
+        $top.eval();
+
+        $top.clk = 0;
+        $top.rst = 0;
+    };
+}
 
 #[test]
-fn video_timing_gen() -> Result<(), Whatever> {
-    let runtime = VerilatorRuntime::new(
-        "artifacts".into(),
-        &["src/rtl/video_timing_gen.sv".as_ref()],
-        &["src/rtl".into()],
-        [],
-        VerilatorRuntimeOptions::default_logging(),
-    )?;
+fn check_dotclk_division() -> Result<(), Whatever> {
+    let runtime = setup_runtime!();
+    let mut top = runtime.create_model_simple::<VideoTimingGen>()?;
+    reset_top_module!(top);
 
-    let mut main = runtime.create_model::<VideoTimingGen>(
-        &VerilatedModelConfig {
-            enable_tracing: true,
-            ..Default::default()
+    for cycle in 0..5 {
+        for i in 0..10 {
+            let expected_dotclk = if i >= 5 { 0 } else { 1 };
+            if top.dotclk != expected_dotclk { panic!(); }
+            
+            top.clk = 0;
+            top.eval();
+
+            top.clk = 1;
+            top.eval();
         }
-    )?;
-
-    let mut vcd = main.open_vcd("video_timing_gen.vcd");
-
-    let mut sim_time = 0;
-
-    while sim_time < MAX_SIM_TIME {
-        sim_time += 1;
     }
 
     Ok(())
