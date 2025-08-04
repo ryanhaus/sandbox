@@ -6,10 +6,10 @@ module at24c02_ctl # (
 
     // Control interface (AXIS-like)
     input [10:0] address,    // address of the first byte to read from/write to
-    input [7:0] din,         // input data (for writes)
-    output logic [7:0] dout, // output data (for reads)
+    input [7:0] din,         // input data (only valid during writes)
+    output logic [7:0] dout, // output data (only valid during reads)
     input wr_en,             // selects the direction of the tranfers, 0 = read, 1 = write
-    output logic ready,  // signifies that this module is ready for a transfer to occur
+    output logic ready,      // signifies that this module is ready for a transfer to occur
     input parent_ready,      // signifies that parent module is ready for a transfer to occur
     input last,              // signifies that this transfer will be the last of this sequence
 
