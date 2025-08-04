@@ -96,7 +96,7 @@ module video_timing_gen #(
 
         // generate the 'active' signal
         h_active = (ctr_h >= (PERIOD_HSYNC + PERIOD_HBP)) && (ctr_h < (PERIOD_HSYNC + PERIOD_HBP + PERIOD_HACTIVE));
-        v_active = (ctr_v >= (PERIOD_VSYNC + PERIOD_VBP)) && (ctr_v < (PERIOD_VSYNC + PERIOD_VBP + PERIOD_VACTIVE));
+        v_active = (ctr_v >= (PERIOD_VSYNC + PERIOD_VBP)) && (ctr_v < (PERIOD_VSYNC + PERIOD_VBP + PERIOD_HACTIVE));
         active = h_active && v_active;
     end
 

@@ -13,7 +13,7 @@ const MAX_SIM_TIME: u32 = 1_000_000;
 fn video_timing_gen() -> Result<(), Whatever> {
     let runtime = VerilatorRuntime::new(
         "artifacts".into(),
-        &["src/rtl/top.sv".as_ref()],
+        &["src/rtl/video_timing_gen.sv".as_ref()],
         &["src/rtl".into()],
         [],
         VerilatorRuntimeOptions::default_logging(),
