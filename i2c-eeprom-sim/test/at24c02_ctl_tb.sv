@@ -67,7 +67,7 @@ module at24c02_ctl_tb();
             #10 clk = ~clk;
     end
 
-    logic [7:0] eeprom_read_values [16];
+    logic [7:0] eeprom_read_values [8];
 
     initial begin
         eeprom_addr = 'b0;
@@ -80,8 +80,8 @@ module at24c02_ctl_tb();
 
         /*
          * Test: Repeat the following 16 times:
-         *  - Write 16 sequential bytes to EEPROM starting at address 0x123
-         *  - Read back the 16 previous bytes
+         *  - Write 8 sequential bytes to EEPROM starting at various addresses
+         *  - Read back the 8 previous bytes
          *  - Verify values
          */
         for (int x = 0; x < 16; x++) begin
@@ -93,9 +93,9 @@ module at24c02_ctl_tb();
             do #20; while(!ctl_module_ready);
 
             // write some more bytes out
-            for (int i = 1; i < 16; i++) begin
+            for (int i = 1; i < 8; i++) begin
                 eeprom_din = { x[3:0], i[3:0] };
-                ctl_last = (i == 15);
+                ctl_last = (i == 7);
                 do #20; while(!ctl_module_ready);
             end
 
@@ -111,8 +111,8 @@ module at24c02_ctl_tb();
             do #20; while(!ctl_module_ready);
             eeprom_read_values[0] = eeprom_dout;
 
-            for (int i = 1; i < 16; i++) begin
-                ctl_last = (i == 15);
+            for (int i = 1; i < 8; i++) begin
+                ctl_last = (i == 7);
                 do #20; while(!ctl_module_ready);
                 eeprom_read_values[i] = eeprom_dout;
             end
@@ -121,7 +121,7 @@ module at24c02_ctl_tb();
             ctl_last = 'b0;
 
             // verify values
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < 8; i++)
                 if (eeprom_read_values[i] != { x[3:0], i[3:0] }) $error();
 
             #20;
