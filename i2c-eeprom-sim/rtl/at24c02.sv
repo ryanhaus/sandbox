@@ -25,7 +25,7 @@ module at24c02 #(
     logic i2c_s_tvalid, i2c_m_tvalid,
           i2c_s_tready, i2c_m_tready,
           i2c_s_tlast, i2c_m_tlast;
-    logic i2c_release_bus, i2c_addressed;
+    logic i2c_release_bus, i2c_addressed, i2c_bus_active;
 
 
 
@@ -55,7 +55,7 @@ module at24c02 #(
         .busy(),
         .bus_address(),
         .bus_addressed(i2c_addressed),
-        .bus_active(),
+        .bus_active(i2c_bus_active),
 
         .enable('b1),
         .device_address(I2C_ADDR),
@@ -79,7 +79,8 @@ module at24c02 #(
         IDLE,
         RECV_ADDR_H,
         RECV_ADDR_L,
-        ACTIVE,
+        READ,
+        WRITE,
         STOP
     } i2c_eeprom_state;
 
@@ -104,19 +105,25 @@ module at24c02 #(
                 RECV_ADDR_L:
                     if (i2c_m_tvalid) begin
                         eeprom_addr[7:0] <= i2c_m_tdata;
-                        state <= ACTIVE;
+
+                        // i2c_m_tlast == 1 --> read operation (since no more
+                        // bytes will be written)
+                        state <= i2c_m_tlast ? READ : WRITE;
                     end
 
-                ACTIVE: begin
+                READ:
+                    if (!i2c_bus_active)
+                        state <= STOP;
+                    else if (i2c_s_tready)
+                        // increase address pointer with every transaction
+                        eeprom_addr <= eeprom_addr + 'b1;
+
+                WRITE:
                     if (i2c_m_tlast)
                         state <= STOP;
-                    else if (i2c_m_tvalid || i2c_s_tready) begin
+                    else if (i2c_m_tvalid)
                         // increase address pointer with every transaction
-                        // i2c_m_tvalid == 1 --> a write has occurred
-                        // i2c_s_tready == 1 --> a read has occurred
                         eeprom_addr <= eeprom_addr + 'b1;
-                    end
-                end
 
                 STOP: state <= IDLE;
             endcase
@@ -134,12 +141,12 @@ module at24c02 #(
         eeprom_we = 'b0;
 
         case (state)
-            ACTIVE: begin
-                // for reads
+            READ: begin
                 i2c_s_tdata = eeprom_dout;
                 i2c_s_tvalid = 'b1;
+            end
 
-                // for writes
+            WRITE: begin
                 eeprom_din = i2c_m_tdata;
                 eeprom_we = i2c_m_tvalid;
             end

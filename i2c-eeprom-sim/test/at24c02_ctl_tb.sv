@@ -64,6 +64,8 @@ module at24c02_ctl_tb();
             #10 clk = ~clk;
     end
 
+    logic [7:0] eeprom_read_values [16];
+
     initial begin
         eeprom_addr = 'b0;
         eeprom_din = 'b0;
@@ -73,25 +75,49 @@ module at24c02_ctl_tb();
 
         #100
 
-        // test 1: write to eeprom
+        /*
+         * test #1:
+         *  - Write 16 sequential bytes to EEPROM starting at address 0x123
+         *  - Read back the 16 previous bytes
+         *  - Verify values
+         */
         // write EEPROM data address & first byte, and wait to finish
         eeprom_addr = 'h123;
-        eeprom_din = 'hF0;
+        eeprom_din = 'h50;
         eeprom_wr_en = 'b1;
         ctl_parent_ready = 'b1;
         do #20; while(!ctl_module_ready);
 
         // write some more bytes out
-        for (int i = 1; i < 15; i++) begin
-            eeprom_din = { 4'hF, i[3:0] };
+        for (int i = 1; i < 16; i++) begin
+            eeprom_din = { 4'h5, i[3:0] };
+            ctl_last = (i == 15);
             do #20; while(!ctl_module_ready);
         end
 
-        eeprom_din = 'hFF;
-        ctl_last = 'b1;
-        #20 ctl_parent_ready = 'b0;
+        ctl_parent_ready = 'b0;
+        ctl_last = 'b0;
 
+        // TODO remove this delay, this is just for clarity when reading waveform
+        #500000;
+
+        // write EEPROM address with intention to read
+        eeprom_addr = 'h123;
+        eeprom_wr_en = 'b0;
+        ctl_parent_ready = 'b1;
         do #20; while(!ctl_module_ready);
+        eeprom_read_values[0] = eeprom_dout;
+
+        for (int i = 1; i < 16; i++) begin
+            ctl_last = (i == 15);
+            do #20; while(!ctl_module_ready);
+            eeprom_read_values[i] = eeprom_dout;
+        end
+
+        ctl_parent_ready = 'b0;
+        ctl_last = 'b0;
+
+        #500000;
     end
 
 

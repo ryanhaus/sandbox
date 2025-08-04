@@ -91,7 +91,6 @@ module at24c02_ctl # (
         WR_ADDR_H,
         WR_ADDR_L,
         WRITE,
-        SETUP_RD,
         READ
     } ctl_state;
 
@@ -126,7 +125,7 @@ module at24c02_ctl # (
                 // wait until a byte is able to be written out
                 WR_ADDR_L:
                     if (s_tready)
-                        state <= cur_wr_en ? WRITE : SETUP_RD;
+                        state <= cur_wr_en ? WRITE : READ;
 
                 // loop until 'last' signal
                 WRITE:
@@ -138,16 +137,9 @@ module at24c02_ctl # (
                             state <= IDLE;
                     end
 
-                // wait until a transfer has occured with I2C master ctrl if
-                SETUP_RD:
-                    if (cmd_ready)
-                        state <= READ;
-
                 // loop until 'last' signal
                 READ:
-                    if (s_tready) begin
-                        // 'is_last' is 'last' delayed by one byte time so
-                        // that the last byte actually gets transferred
+                    if (m_tvalid) begin
                         is_last <= last;
                         if (is_last)
                             state <= IDLE;
@@ -185,9 +177,10 @@ module at24c02_ctl # (
                 cmd_write_multiple = 'b1;
                 cmd_valid = 'b1;
 
-                // a read should have no stop between writing the address and
-                // reading bytes, whereas write should since it's all one
-                // transaction
+                // since writes are all one transaction, the stop flag needs
+                // to be set here. for reads, there is a write transaction
+                // (sending over address), then several read transactions, the
+                // last read transaction should have the stop bit.
                 if (cur_wr_en)
                     cmd_stop = 'b1;
             end
@@ -202,29 +195,29 @@ module at24c02_ctl # (
             WR_ADDR_L: begin
                 s_tdata = cur_address[7:0];
                 s_tvalid = 'b1;
+
+                // if this is a read, this will be the last byte written
+                if (!cur_wr_en)
+                    s_tlast = 'b1;
             end
 
-            // write out input byte
+            // write out byte
             WRITE: begin
                 s_tdata = din;
-                s_tvalid = 'b1;
-                ready = s_tready;
-                s_tlast = last;
-            end
-
-            // write to command interface to expect a read
-            SETUP_RD: begin
-                cmd_read = 'b1;
-                cmd_stop = 'b1;
-                cmd_valid = 'b1;
-            end
-
-            // read to output byte
-            READ: begin
-                dout = m_tdata;
                 s_tvalid = parent_ready;
                 ready = s_tready;
                 s_tlast = last;
+            end
+
+            // read in byte
+            READ: begin
+                cmd_read = 'b1;
+                cmd_stop = last;
+                cmd_valid = 'b1;
+
+                dout = m_tdata;
+                m_tready = parent_ready;
+                ready = m_tvalid;
             end
         endcase
     end
