@@ -138,12 +138,15 @@ module at24c02_ctl # (
                     end
 
                 // loop until 'last' signal
-                READ:
+                READ: begin
                     if (m_tvalid) begin
+                        // 'is_last' is 'last' delayed by one byte time so
+                        // that the last byte actually gets transferred
                         is_last <= last;
                         if (is_last)
                             state <= IDLE;
                     end
+                end
             endcase
         end
     end
