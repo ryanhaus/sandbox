@@ -6,6 +6,8 @@
  *   - verilog-i2c: https://github.com/alexforencich/verilog-i2c (MIT license)
  *
  * See datasheet: https://ww1.microchip.com/downloads/en/DeviceDoc/doc0180.pdf
+ *
+ * Note that this module currently does not handle I2C bus errors.
  */
 module at24c02_ctl # (
     parameter SLAVE_ADDR = 7'h50

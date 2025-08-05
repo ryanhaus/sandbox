@@ -13,6 +13,9 @@
  *     boundaries are violated. See "PAGE WRITE" section in datasheet on pg
  *     9. TODO: simulate pages?
  *
+ *   - This module does not handle I2C bus errors or invalid packets and
+ *     assumes that all inputs are valid.
+ *
  *   - The I2C address is configurable with the module parameter I2C_ADDR
  *     instead of using dedicated hardware pins.
  *
