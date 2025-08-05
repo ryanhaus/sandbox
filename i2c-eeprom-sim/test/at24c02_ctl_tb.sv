@@ -90,6 +90,8 @@ module at24c02_ctl_tb();
             eeprom_din = { x[3:0], 4'h0 };
             eeprom_wr_en = 'b1;
             ctl_parent_ready = 'b1;
+
+            #20; // delay so loop doesn't read ctl_module_ready as 1 in first cycle
             do #20; while(!ctl_module_ready);
 
             // write some more bytes out
@@ -102,12 +104,12 @@ module at24c02_ctl_tb();
             ctl_parent_ready = 'b0;
             ctl_last = 'b0;
 
-            #20;
-
             // write EEPROM address with intention to read
             eeprom_addr = { x[3:0], 7'h0 };
             eeprom_wr_en = 'b0;
             ctl_parent_ready = 'b1;
+
+            #20; // delay so loop doesn't read ctl_module_ready as 1 in first cycle
             do #20; while(!ctl_module_ready);
             eeprom_read_values[0] = eeprom_dout;
 
@@ -123,8 +125,6 @@ module at24c02_ctl_tb();
             // verify values
             for (int i = 0; i < 8; i++)
                 if (eeprom_read_values[i] != { x[3:0], i[3:0] }) $error();
-
-            #20;
         end
     end
 
