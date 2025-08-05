@@ -103,3 +103,33 @@ fn check_hsync_period() -> Result<(), Whatever> {
 
     Ok(())
 }
+
+#[test]
+fn check_vsync_period() -> Result<(), Whatever> {
+    let runtime = setup_runtime!();
+    let mut top = runtime.create_model_simple::<VideoTimingGen>()?;
+    reset_top_module!(top);
+
+    for cycle in 0..5 {
+        let mut clks_0 = 0;
+        let mut clks_1 = 0;
+
+        while top.vsync == 0 {
+            clks_0 += 1;
+            clock_cycle!(top);
+        }
+        
+        while top.vsync == 1 {
+            clks_1 += 1;
+            clock_cycle!(top);
+        }
+
+        clks_0 /= (DOTCLK_DIV * PERIOD_HORIZONTAL);
+        clks_1 /= (DOTCLK_DIV * PERIOD_HORIZONTAL);
+
+        if clks_0 != PERIOD_VSYNC { panic!(); }
+        if clks_0 + clks_1 != PERIOD_VERTICAL { panic!(); }
+    }
+
+    Ok(())
+}
