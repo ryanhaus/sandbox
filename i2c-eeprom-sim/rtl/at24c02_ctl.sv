@@ -17,9 +17,9 @@ module at24c02_ctl # (
 
     // Control interface (AXIS-like)
     input [10:0] address,    // address of the first byte to read from/write to
+    input wr_en,             // selects the direction of the tranfers, 0 = read, 1 = write
     input [7:0] din,         // input data (only valid during writes)
     output logic [7:0] dout, // output data (only valid during reads)
-    input wr_en,             // selects the direction of the tranfers, 0 = read, 1 = write
     output logic ready,      // signifies that this module is ready for a transfer to occur
     input parent_ready,      // signifies that parent module is ready for a transfer to occur
     input last,              // signifies that this transfer will be the last of this sequence
@@ -36,7 +36,7 @@ module at24c02_ctl # (
 
     // Control signals
     logic [10:0] cur_address;
-    logic cur_wr_en;
+    logic cur_wr_en, cur_last;
 
     // I2C master signals
     logic [6:0] cmd_address;
@@ -102,11 +102,11 @@ module at24c02_ctl # (
         WR_ADDR_H,
         WR_ADDR_L,
         WRITE,
+        SETUP_RD,
         READ
     } ctl_state;
 
     ctl_state state;
-    logic is_last;
 
     always_ff @(posedge clk) begin
         if (rst) begin
@@ -120,7 +120,10 @@ module at24c02_ctl # (
                         state <= SETUP_WR_ADDR;
                         cur_address <= address;
                         cur_wr_en <= wr_en;
-                        is_last <= 'b0;
+
+                        // cur_last should be 0 on the first cycle to prevent
+                        // immediately switching out of the READ/WRITE state
+                        cur_last <= 'b0;
                     end
 
                 // wait until a transfer has occured with I2C master ctrl if
@@ -139,24 +142,16 @@ module at24c02_ctl # (
                         state <= cur_wr_en ? WRITE : READ;
 
                 // loop until 'last' signal
-                WRITE:
-                    if (s_tready) begin
-                        // 'is_last' is 'last' delayed by one byte time so
-                        // that the last byte actually gets transferred
-                        is_last <= last;
-                        if (is_last)
-                            state <= IDLE;
-                    end
+                READ, WRITE: begin
+                    // 'cur_last' is 'last' delayed by one cycle so
+                    // that the last byte actually gets transferred
+                    if (ready && parent_ready)
+                        cur_last <= last;
+                    // TODO: figure out a way to make it so that READ stays
+                    // for long enough to send out cmd packet and data
 
-                // loop until 'last' signal
-                READ: begin
-                    if (m_tvalid) begin
-                        // 'is_last' is 'last' delayed by one byte time so
-                        // that the last byte actually gets transferred
-                        is_last <= last;
-                        if (is_last)
-                            state <= IDLE;
-                    end
+                    if (cur_last)
+                        state <= IDLE;
                 end
             endcase
         end
@@ -165,7 +160,7 @@ module at24c02_ctl # (
     always_comb begin
         // Module control interface
         ready = 'b0;
-        dout = 'b0;
+        dout = m_tdata;
 
         // I2C master command interface
         cmd_address = SLAVE_ADDR;
@@ -229,7 +224,6 @@ module at24c02_ctl # (
                 cmd_stop = last;
                 cmd_valid = 'b1;
 
-                dout = m_tdata;
                 m_tready = parent_ready;
                 ready = m_tvalid;
             end

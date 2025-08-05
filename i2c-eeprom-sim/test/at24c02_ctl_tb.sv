@@ -79,52 +79,102 @@ module at24c02_ctl_tb();
         #100
 
         /*
+         * Test: Write and read a single byte (0x55) to an address (0x123)
+         */
+        // first write the address, then the byte
+        eeprom_addr = 'h123;
+        eeprom_wr_en = 'b1;
+        ctl_parent_ready = 'b1;
+
+        #20;
+        eeprom_addr = 'b0;
+        eeprom_wr_en = 'b0;
+        eeprom_din = 'h55;
+        ctl_last = 'b1;
+        do #20; while(!ctl_module_ready);
+
+        #20;
+        eeprom_din = 'b0;
+        ctl_last = 'b0;
+        ctl_parent_ready = 'b0;
+        do #20; while(!ctl_module_ready);
+        #10000;
+
+        // write the address again, read the byte out
+        eeprom_addr = 'h123;
+        eeprom_wr_en = 'b0;
+        ctl_parent_ready = 'b1;
+
+        #20;
+        eeprom_addr = 'b0;
+        ctl_last = 'b1;
+        do #20; while (!ctl_module_ready);
+
+        #20;
+        ctl_last = 'b0;
+        ctl_parent_ready = 'b0;
+
+        if (eeprom_dout != 'h55) $error();
+
+        #100000;
+
+
+        /*
          * Test: Repeat the following 16 times:
          *  - Write 8 sequential bytes to EEPROM starting at various addresses
          *  - Read back the 8 previous bytes
          *  - Verify values
          */
         for (int x = 0; x < 16; x++) begin
-            // write EEPROM data address & first byte, and wait to finish
+            // write EEPROM data address, and wait to finish
             eeprom_addr = { x[3:0], 7'h0 };
-            eeprom_din = { x[3:0], 4'h0 };
             eeprom_wr_en = 'b1;
             ctl_parent_ready = 'b1;
 
-            #20; // delay so loop doesn't read ctl_module_ready as 1 in first cycle
+            #20;
+            eeprom_addr = 'b0;
+            eeprom_wr_en = 'b0;
+            ctl_parent_ready = 'b0;
             do #20; while(!ctl_module_ready);
 
-            // write some more bytes out
-            for (int i = 1; i < 8; i++) begin
+            // write the bytes out
+            for (int i = 0; i < 8; i++) begin
                 eeprom_din = { x[3:0], i[3:0] };
+                ctl_parent_ready = 'b1;
                 ctl_last = (i == 7);
+
+                #20;
+                eeprom_din = 'b0;
+                ctl_parent_ready = 'b0;
+                ctl_last = 'b0;
                 do #20; while(!ctl_module_ready);
             end
 
-            ctl_parent_ready = 'b0;
-            ctl_last = 'b0;
-
             // write EEPROM address with intention to read
+            #200000;
             eeprom_addr = { x[3:0], 7'h0 };
             eeprom_wr_en = 'b0;
             ctl_parent_ready = 'b1;
 
-            #20; // delay so loop doesn't read ctl_module_ready as 1 in first cycle
-            do #20; while(!ctl_module_ready);
-            eeprom_read_values[0] = eeprom_dout;
+            #20;
+            eeprom_addr = 'b0;
 
-            for (int i = 1; i < 8; i++) begin
+            for (int i = 0; i < 8; i++) begin
                 ctl_last = (i == 7);
+
                 do #20; while(!ctl_module_ready);
+
                 eeprom_read_values[i] = eeprom_dout;
             end
 
-            ctl_parent_ready = 'b0;
             ctl_last = 'b0;
+            ctl_parent_ready = 'b0;
 
             // verify values
             for (int i = 0; i < 8; i++)
                 if (eeprom_read_values[i] != { x[3:0], i[3:0] }) $error();
+
+            #200000;
         end
     end
 
