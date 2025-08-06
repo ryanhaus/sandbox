@@ -79,42 +79,46 @@ module at24c02_ctl_tb();
         #100
 
         /*
-         * Test: Write and read a single byte (0x55) to an address (0x123)
+         * Test: Write and read single bytes
          */
-        // first write the address, then the byte
-        eeprom_addr = 'h123;
-        eeprom_wr_en = 'b1;
-        ctl_parent_ready = 'b1;
+        for (int x = 0; x < 8; x++) begin
+            // first write the address, then the byte
+            eeprom_addr = { x[2:0], 8'hFF };
+            eeprom_wr_en = 'b1;
+            ctl_parent_ready = 'b1;
 
-        #20;
-        eeprom_addr = 'b0;
-        eeprom_wr_en = 'b0;
-        eeprom_din = 'h55;
-        ctl_last = 'b1;
-        do #20; while(!ctl_module_ready);
+            #20;
+            eeprom_addr = 'b0;
+            eeprom_wr_en = 'b0;
+            eeprom_din = { 4'h5, x[3:0] };
+            ctl_last = 'b1;
+            do #20; while(!ctl_module_ready);
 
-        #20;
-        eeprom_din = 'b0;
-        ctl_last = 'b0;
-        ctl_parent_ready = 'b0;
-        do #20; while(!ctl_module_ready);
-        #10000;
+            #20;
+            eeprom_din = 'b0;
+            ctl_last = 'b0;
+            ctl_parent_ready = 'b0;
+            do #20; while(!ctl_module_ready);
+            #10000;
 
-        // write the address again, read the byte out
-        eeprom_addr = 'h123;
-        eeprom_wr_en = 'b0;
-        ctl_parent_ready = 'b1;
+            // write the address again, read the byte out
+            eeprom_addr = { x[2:0], 8'hFF };
+            eeprom_wr_en = 'b0;
+            ctl_parent_ready = 'b1;
 
-        #20;
-        eeprom_addr = 'b0;
-        ctl_last = 'b1;
-        do #20; while (!ctl_module_ready);
+            #20;
+            eeprom_addr = 'b0;
+            ctl_last = 'b1;
+            do #20; while (!ctl_module_ready);
 
-        #20;
-        ctl_last = 'b0;
-        ctl_parent_ready = 'b0;
+            #20;
+            ctl_last = 'b0;
+            ctl_parent_ready = 'b0;
 
-        if (eeprom_dout != 'h55) $error();
+            if (eeprom_dout != { 4'h5, x[3:0] }) $error();
+
+            #1000;
+        end
 
         #100000;
 
