@@ -167,8 +167,10 @@ module at24c02_ctl_tb();
                 eeprom_read_values[i] = eeprom_dout;
             end
 
-            #20;
-
+            // these two statements should be done after everything else is
+            // evaluated for this tick to prevent a simulation race condition
+            // issue
+            #0;
             ctl_last = 'b0;
             ctl_parent_ready = 'b0;
 

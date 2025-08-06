@@ -37,7 +37,6 @@ module at24c02_ctl # (
     // Control signals
     logic [10:0] cur_address;
     logic cur_wr_en, cur_last;
-    logic go_next_state;
 
     // I2C master signals
     logic [6:0] cmd_address;
@@ -122,7 +121,6 @@ module at24c02_ctl # (
                         state <= SETUP_WR_ADDR;
                         cur_address <= address;
                         cur_wr_en <= wr_en;
-                        go_next_state <= 'b0;
 
                         // cur_last should be 0 on the first cycle to prevent
                         // immediately switching out of the READ/WRITE state
@@ -160,11 +158,13 @@ module at24c02_ctl # (
                     if (cmd_ready)
                         state <= READ;
 
+                // loop between READ and SETUP_RD until 'last' signal
                 READ: begin
-                    // used so that the READ state always lasts at least
-                    // one full cycle
-                    go_next_state <= (ready && parent_ready);
+                    // 'cur_last' is 'last' delayed by one cycle so
+                    // that the last byte actually gets transferred
                     cur_last <= last;
+
+                    // either keep going through reads or stop
                     if (ready && parent_ready)
                         state <= cur_last ? STOP_RD : SETUP_RD;
                 end
@@ -238,6 +238,7 @@ module at24c02_ctl # (
                 s_tlast = last;
             end
 
+            // set up a read transaction over i2c
             SETUP_RD: begin
                 cmd_read = 'b1;
                 cmd_valid = 'b1;
@@ -249,6 +250,7 @@ module at24c02_ctl # (
                 ready = m_tvalid;
             end
 
+            // set stop bit
             STOP_RD: begin
                 cmd_stop = 'b1;
                 cmd_valid = 'b1;
