@@ -8,11 +8,6 @@
  * See datasheet: https://ww1.microchip.com/downloads/en/DeviceDoc/doc0180.pdf
  *
  * Limitations and differences from hardware:
- *   - Does not simulate pages, so any amount of bytes can be written to any
- *     address and it will not behave exactly like the hardware if the page
- *     boundaries are violated. See "PAGE WRITE" section in datasheet on pg
- *     9. TODO: simulate pages?
- *
  *   - This module does not handle I2C bus errors or invalid packets and
  *     assumes that all inputs are valid.
  *
@@ -149,7 +144,9 @@ module at24c02 #(
                         state <= STOP;
                     else if (i2c_m_tvalid)
                         // increase address pointer with every transaction
-                        eeprom_addr <= eeprom_addr + 'b1;
+                        // NOTE: only the 3 lower bits are incremented to
+                        // emulate how pages work in the actual hardware
+                        eeprom_addr[2:0] <= eeprom_addr[2:0] + 'b1;
 
                 STOP: state <= IDLE;
             endcase
