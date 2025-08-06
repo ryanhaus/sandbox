@@ -37,6 +37,7 @@ module at24c02_ctl # (
     // Control signals
     logic [10:0] cur_address;
     logic cur_wr_en, cur_last;
+    logic go_next_state;
 
     // I2C master signals
     logic [6:0] cmd_address;
@@ -103,7 +104,8 @@ module at24c02_ctl # (
         WR_ADDR_L,
         WRITE,
         SETUP_RD,
-        READ
+        READ,
+        STOP_RD
     } ctl_state;
 
     ctl_state state;
@@ -120,13 +122,14 @@ module at24c02_ctl # (
                         state <= SETUP_WR_ADDR;
                         cur_address <= address;
                         cur_wr_en <= wr_en;
+                        go_next_state <= 'b0;
 
                         // cur_last should be 0 on the first cycle to prevent
                         // immediately switching out of the READ/WRITE state
                         cur_last <= 'b0;
                     end
 
-                // wait until a transfer has occured with I2C master ctrl if
+                // wait until master is in write mode
                 SETUP_WR_ADDR:
                     if (cmd_ready)
                         state <= WR_ADDR_H;
@@ -139,20 +142,37 @@ module at24c02_ctl # (
                 // wait until a byte is able to be written out
                 WR_ADDR_L:
                     if (s_tready)
-                        state <= cur_wr_en ? WRITE : READ;
+                        state <= cur_wr_en ? WRITE : SETUP_RD;
 
                 // loop until 'last' signal
-                READ, WRITE: begin
+                WRITE: begin
                     // 'cur_last' is 'last' delayed by one cycle so
                     // that the last byte actually gets transferred
                     if (ready && parent_ready)
                         cur_last <= last;
-                    // TODO: figure out a way to make it so that READ stays
-                    // for long enough to send out cmd packet and data
 
                     if (cur_last)
                         state <= IDLE;
                 end
+
+                // wait until master is in read mode
+                SETUP_RD:
+                    if (cmd_ready)
+                        state <= READ;
+
+                READ: begin
+                    // used so that the READ state always lasts at least
+                    // one full cycle
+                    go_next_state <= (ready && parent_ready);
+                    cur_last <= last;
+                    if (ready && parent_ready)
+                        state <= cur_last ? STOP_RD : SETUP_RD;
+                end
+
+                // wait until stop bit has been set
+                STOP_RD:
+                    if (cmd_ready)
+                        state <= IDLE;
             endcase
         end
     end
@@ -218,14 +238,20 @@ module at24c02_ctl # (
                 s_tlast = last;
             end
 
+            SETUP_RD: begin
+                cmd_read = 'b1;
+                cmd_valid = 'b1;
+            end
+
             // read in byte
             READ: begin
-                cmd_read = 'b1;
-                cmd_stop = last;
-                cmd_valid = 'b1;
-
                 m_tready = parent_ready;
                 ready = m_tvalid;
+            end
+
+            STOP_RD: begin
+                cmd_stop = 'b1;
+                cmd_valid = 'b1;
             end
         endcase
     end

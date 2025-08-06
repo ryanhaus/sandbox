@@ -167,6 +167,8 @@ module at24c02_ctl_tb();
                 eeprom_read_values[i] = eeprom_dout;
             end
 
+            #20;
+
             ctl_last = 'b0;
             ctl_parent_ready = 'b0;
 
