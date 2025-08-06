@@ -79,7 +79,7 @@ module at24c02_ctl_tb();
         #100
 
         /*
-         * Test: Write and read single bytes
+         * Test: Write and read single bytes (x8)
          */
         for (int x = 0; x < 8; x++) begin
             // first write the address, then the byte
@@ -184,6 +184,8 @@ module at24c02_ctl_tb();
 
             #200000;
         end
+
+        $finish;
     end
 
 

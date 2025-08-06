@@ -102,6 +102,7 @@ module at24c02_ctl # (
         WR_ADDR_H,
         WR_ADDR_L,
         WRITE,
+        WRITE_WAIT_DONE,
         SETUP_RD,
         READ,
         STOP_RD
@@ -150,8 +151,14 @@ module at24c02_ctl # (
                         cur_last <= last;
 
                     if (cur_last)
-                        state <= IDLE;
+                        state <= WRITE_WAIT_DONE;
                 end
+
+                // wait until stop bit has been set
+                WRITE_WAIT_DONE:
+                    if (cmd_ready)
+                        state <= IDLE;
+
 
                 // wait until master is in read mode
                 SETUP_RD:
