@@ -4,3 +4,6 @@
 [submodule "i2c-eeprom-sim/cores/verilog-i2c"]
 	path = i2c-eeprom-sim/cores/verilog-i2c
 	url = https://github.com/alexforencich/verilog-i2c
+[submodule "lvgl/lvgl"]
+	path = lvgl/lvgl
+	url = https://github.com/lvgl/lvgl
