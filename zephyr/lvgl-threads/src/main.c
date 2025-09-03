@@ -2,30 +2,11 @@
 #include <zephyr/devicetree.h>
 #include <zephyr/drivers/display.h>
 #include <zephyr/kernel.h>
-
 #include <lvgl.h>
+#include <stdio.h>
+#include "sensor.h"
 
-void setup_gui(void)
-{
-    // set background color
-    lv_obj_set_style_bg_color(
-        lv_screen_active(),
-        lv_color_hex(0xFF0000),
-        LV_PART_MAIN
-    );
-
-    // create label
-    lv_obj_t* label = lv_label_create(lv_screen_active());
-    lv_label_set_text(label, "Hello");
-
-    lv_obj_set_style_text_color(
-        lv_screen_active(),
-        lv_color_hex(0xFFFFFF),
-        LV_PART_MAIN
-    );
-
-    lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
-}
+volatile float sensor_value = 0.0f;
 
 int main(void)
 {
@@ -34,17 +15,57 @@ int main(void)
     if (!device_is_ready(display_dev))
         return -ENODEV;
 
-    setup_gui();
+    /* setup LVGL */
+    // set background color
+    lv_obj_set_style_bg_color(
+        lv_screen_active(),
+        lv_color_hex(0xFFFFFF),
+        LV_PART_MAIN
+    );
 
+    // create label
+    lv_obj_t* label = lv_label_create(lv_screen_active());
+    lv_label_set_text(label, ""); 
+
+    lv_obj_set_style_text_color(
+        lv_screen_active(),
+        lv_color_hex(0x000000),
+        LV_PART_MAIN
+    );
+
+    lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
+
+    /* LVGL main loop */
     lv_timer_handler();
     display_blanking_off(display_dev);
 
     while (1)
     {
-        uint32_t sleep_ms = lv_timer_handler();
+        char label_str[32];
+        snprintf(label_str, sizeof(label_str), "Sensor Value: %.2f", sensor_value);
 
-        k_msleep(MIN(sleep_ms, INT32_MAX));
+        lv_label_set_text(label, label_str);
+
+        lv_timer_handler();
+        k_msleep(5);
     }
 
     return 0;
 }
+
+void update_sensor_val(void)
+{
+    while (1)
+    {
+        sensor_value = get_sensor_val();
+        k_msleep(20);
+    }
+}
+
+K_THREAD_DEFINE(
+    sensor_thread,
+    1024,
+    update_sensor_val,
+    NULL, NULL, NULL,
+    7, 0, 0
+);
