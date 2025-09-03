@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include "sensor.h"
 
-#define M_PI 3.14159265358979323846
+#define M_PI 3.14159265358979323846f
 
 volatile float sensor_value = 0.0f;
 
@@ -79,7 +79,7 @@ int main(void)
 
         // update label text
         char label_str[32];
-        snprintf(label_str, sizeof(label_str), "%.1f", sensor_value);
+        snprintf(label_str, sizeof(label_str), "%.1f", (double)sensor_value);
 
         lv_label_set_text(label, label_str);
 
