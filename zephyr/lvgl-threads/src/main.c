@@ -40,25 +40,37 @@ int main(void)
 
     lv_obj_align(label, LV_ALIGN_BOTTOM_MID, 0, 0);
 
-    // create line
-    const int LINE_BASE_X = SCREEN_WIDTH / 2;
-    const int LINE_BASE_Y = SCREEN_HEIGHT - 30;
-    const int LINE_LENGTH = SCREEN_WIDTH / 2 - 10;
+    // create scale
+    lv_obj_t* scale = lv_scale_create(lv_screen_active());
 
-    lv_point_precise_t line_pts[] = {
-        { LINE_BASE_X, LINE_BASE_Y },
-        { LINE_BASE_X, LINE_BASE_Y },
-    };
+    lv_obj_set_size(scale, 150, 150);
+    lv_scale_set_mode(scale, LV_SCALE_MODE_ROUND_INNER);
 
-    lv_style_t style_line;
-    lv_style_init(&style_line);
-    lv_style_set_line_width(&style_line, 8);
-    lv_style_set_line_color(&style_line, lv_palette_main(LV_PALETTE_RED));
-    lv_style_set_line_rounded(&style_line, true);
+    lv_obj_set_style_bg_opa(scale, LV_OPA_COVER, 0);
+    lv_obj_set_style_bg_color(scale, lv_color_hex(0xDDDDDD), 0);
+    lv_obj_set_style_radius(scale, LV_RADIUS_CIRCLE, 0);
+    lv_obj_set_style_clip_corner(scale, true, 0);
+    lv_obj_align(scale, LV_ALIGN_LEFT_MID, LV_PCT(2), 0);
 
+    lv_scale_set_label_show(scale, true);
+
+    lv_scale_set_total_tick_count(scale, 26);
+    lv_scale_set_major_tick_every(scale, 5);
+
+    lv_obj_set_style_length(scale, 5, LV_PART_ITEMS);
+    lv_obj_set_style_length(scale, 10, LV_PART_INDICATOR);
+    lv_scale_set_range(scale, 0, 25);
+
+    lv_scale_set_angle_range(scale, 270);
+    lv_scale_set_rotation(scale, 135);
+
+    // create scale line
     lv_obj_t* line = lv_line_create(lv_screen_active());
-    lv_line_set_points(line, line_pts, 2);
-    lv_obj_add_style(line, &style_line, 0);
+
+    lv_obj_set_style_line_color(line, lv_color_hex(0xFF0000), LV_PART_MAIN);
+    lv_obj_set_style_line_width(line, 6, LV_PART_MAIN);
+    lv_obj_set_style_line_rounded(line, true, LV_PART_MAIN);
+    lv_scale_set_line_needle_value(scale, line, 60, 0);
 
     /* LVGL main loop */
     lv_timer_handler();
@@ -66,22 +78,14 @@ int main(void)
 
     while (1)
     {
-        // update line position
-        lv_point_precise_t line_pts[] = {
-            { LINE_BASE_X, LINE_BASE_Y },
-            {
-                LINE_BASE_X - LINE_LENGTH * cosf(sensor_value * M_PI / 10.0f),
-                LINE_BASE_Y - LINE_LENGTH * sinf(sensor_value * M_PI / 10.0f)
-            },
-        };
-
-        lv_line_set_points(line, line_pts, 2);
-
         // update label text
         char label_str[32];
         snprintf(label_str, sizeof(label_str), "%.1f", (double)sensor_value);
 
         lv_label_set_text(label, label_str);
+        
+        // update line position
+        lv_scale_set_line_needle_value(scale, line, 60, sensor_value);
 
         // timers
         lv_timer_handler();
