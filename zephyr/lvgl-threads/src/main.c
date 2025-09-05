@@ -3,12 +3,40 @@
 #include <zephyr/drivers/display.h>
 #include <zephyr/kernel.h>
 #include <lvgl.h>
+#include <math.h>
 #include <stdio.h>
 #include "sensor.h"
 
 #define M_PI 3.14159265358979323846f
+#define M_2PI (2.0f * M_PI)
 
 volatile float sensor_value = 0.0f;
+
+void update_scale_line_val(lv_obj_t* scale, lv_obj_t* line, float val)
+{
+    const static int LINE_LEN = 60;
+    const static int LINE_OFFSET_X = 480 / 2;
+    const static int LINE_OFFSET_Y = 272 / 2;
+
+    int min = lv_scale_get_range_min_value(scale),
+        max = lv_scale_get_range_max_value(scale),
+        range = max - min,
+        angle_range = lv_scale_get_angle_range(scale),
+        rot = lv_scale_get_rotation(scale);
+
+    static lv_point_precise_t line_pts[2];
+
+    line_pts[0].x = LINE_OFFSET_X;
+    line_pts[0].y = LINE_OFFSET_Y;
+
+    float angle_mult = M_2PI * (float)angle_range / 360.0f,
+          angle_offset = M_2PI * (float)rot / 360.0f;
+    line_pts[1].x = LINE_OFFSET_X + LINE_LEN * cosf(angle_mult * val / range + angle_offset);
+    line_pts[1].y = LINE_OFFSET_Y + LINE_LEN * sinf(angle_mult * val / range + angle_offset);
+
+    lv_line_set_points(line, line_pts, 2);
+    lv_obj_move_foreground(line);
+}
 
 int main(void)
 {
@@ -70,8 +98,6 @@ int main(void)
     lv_obj_set_style_line_color(line, lv_color_hex(0xFF0000), LV_PART_MAIN);
     lv_obj_set_style_line_width(line, 6, LV_PART_MAIN);
     lv_obj_set_style_line_rounded(line, true, LV_PART_MAIN);
-    lv_scale_set_line_needle_value(scale, line, 60, 0);
-    lv_obj_center(line);
 
     /* LVGL main loop */
     display_blanking_off(display_dev);
@@ -85,7 +111,7 @@ int main(void)
         lv_label_set_text(label, label_str);
         
         // update line position
-        lv_scale_set_line_needle_value(scale, line, 60, sensor_value);
+        update_scale_line_val(scale, line, sensor_value);
 
         // timers
         lv_timer_handler();
