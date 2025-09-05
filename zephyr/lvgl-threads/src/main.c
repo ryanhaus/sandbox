@@ -63,17 +63,17 @@ int main(void)
 
     lv_scale_set_angle_range(scale, 270);
     lv_scale_set_rotation(scale, 135);
+    lv_obj_center(scale);
 
     // create scale line
     lv_obj_t* line = lv_line_create(lv_screen_active());
-
     lv_obj_set_style_line_color(line, lv_color_hex(0xFF0000), LV_PART_MAIN);
     lv_obj_set_style_line_width(line, 6, LV_PART_MAIN);
     lv_obj_set_style_line_rounded(line, true, LV_PART_MAIN);
     lv_scale_set_line_needle_value(scale, line, 60, 0);
+    lv_obj_center(line);
 
     /* LVGL main loop */
-    lv_timer_handler();
     display_blanking_off(display_dev);
 
     while (1)
