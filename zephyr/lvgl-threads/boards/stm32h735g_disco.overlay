@@ -1,6 +1,6 @@
 &ltdc {
     status = "okay";
-    pixel-format = <PANEL_PIXEL_FORMAT_RGB_888>;
+    pixel-format = <PANEL_PIXEL_FORMAT_RGB_565>;
     width = <480>;
 	height = <272>;
     display-timings {
@@ -22,8 +22,4 @@
     chosen {
         zephyr,display = &ltdc;
     };
-};
-
-&sdram {
-    status = "okay";
 };
