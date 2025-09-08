@@ -126,7 +126,7 @@ void update_sensor_val(void)
     while (1)
     {
         sensor_value = get_sensor_val();
-        printf("Updated sensor value: %.2f\t(uptime: %.2f s)\n", sensor_value, (float)k_uptime_get() / 1000.0f);
+        //printf("Updated sensor value: %.2f\t(uptime: %.2f s)\n", sensor_value, (float)k_uptime_get() / 1000.0f);
         k_msleep(20);
     }
 }
