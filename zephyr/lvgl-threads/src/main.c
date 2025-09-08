@@ -57,6 +57,12 @@ int main(void)
     lv_obj_t* label = lv_label_create(lv_screen_active());
     lv_label_set_text(label, ""); 
 
+    lv_obj_set_style_text_font(
+        label,
+        &lv_font_montserrat_20,
+        LV_PART_MAIN
+    ); 
+    
     lv_obj_set_style_text_color(
         lv_screen_active(),
         lv_color_hex(0x000000),
@@ -70,6 +76,12 @@ int main(void)
 
     lv_obj_set_size(scale, 150, 150);
     lv_scale_set_mode(scale, LV_SCALE_MODE_ROUND_INNER);
+
+    lv_obj_set_style_text_font(
+        scale,
+        &lv_font_montserrat_14,
+        LV_PART_MAIN
+    ); 
 
     lv_obj_set_style_bg_opa(scale, LV_OPA_COVER, 0);
     lv_obj_set_style_bg_color(scale, lv_color_hex(0xDDDDDD), 0);
