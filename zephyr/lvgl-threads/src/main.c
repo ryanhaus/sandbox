@@ -46,9 +46,6 @@ int main(void)
         return -ENODEV;
 
     /* setup LVGL */
-    const int SCREEN_WIDTH = lv_obj_get_width(lv_screen_active());
-    const int SCREEN_HEIGHT = lv_obj_get_height(lv_screen_active());
-
     // set background color
     lv_obj_set_style_bg_color(
         lv_screen_active(),
