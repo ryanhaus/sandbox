@@ -148,28 +148,3 @@ K_THREAD_DEFINE(
     NULL, NULL, NULL,
     7, 0, 0
 );
-
-
-void blinky(void)
-{
-    struct gpio_dt_spec led = GPIO_DT_SPEC_GET(DT_ALIAS(led0), gpios);
-
-    if (!gpio_is_ready_dt(&led))
-		return;
-
-    gpio_pin_configure_dt(&led, GPIO_OUTPUT_ACTIVE);
-
-	while (1)
-    {
-		gpio_pin_toggle_dt(&led);
-		k_msleep(500);
-	}
-}
-
-K_THREAD_DEFINE(
-    blinky_thread,
-    1024,
-    blinky,
-    NULL, NULL, NULL,
-    7, 0, 0
-);
