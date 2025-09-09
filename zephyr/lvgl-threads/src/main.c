@@ -13,19 +13,17 @@
 
 volatile float sensor_value = 0.0f;
 
-void update_scale_line_val(lv_obj_t* scale, lv_obj_t* line, float val)
+void update_scale_line_val(lv_obj_t* scale, lv_obj_t* line, lv_point_precise_t* line_pts, float val)
 {
-    const static int LINE_LEN = 60;
-    const static int LINE_OFFSET_X = 480 / 2;
-    const static int LINE_OFFSET_Y = 272 / 2;
+    int LINE_LEN = 60;
+    int LINE_OFFSET_X = lv_obj_get_width(scale) / 2;
+    int LINE_OFFSET_Y = lv_obj_get_height(scale) / 2;
 
     int min = lv_scale_get_range_min_value(scale),
         max = lv_scale_get_range_max_value(scale),
         range = max - min,
         angle_range = lv_scale_get_angle_range(scale),
         rot = lv_scale_get_rotation(scale);
-
-    static lv_point_precise_t line_pts[2];
 
     line_pts[0].x = LINE_OFFSET_X;
     line_pts[0].y = LINE_OFFSET_Y;
@@ -105,10 +103,11 @@ int main(void)
 
     // create scale line
     lv_obj_t* line = lv_line_create(scale);
+    lv_point_precise_t line_pts[2];
+
     lv_obj_set_style_line_color(line, lv_color_hex(0xFF0000), LV_PART_MAIN);
     lv_obj_set_style_line_width(line, 6, LV_PART_MAIN);
     lv_obj_set_style_line_rounded(line, true, LV_PART_MAIN);
-    lv_scale_set_line_needle_value(scale, line, 60, 0);
 
     /* LVGL main loop */
     display_blanking_off(display_dev);
@@ -122,8 +121,8 @@ int main(void)
         lv_label_set_text(label, label_str);
         
         // update line position
-        lv_scale_set_line_needle_value(scale, line, 60, (int)roundf(sensor_value));
-        //update_scale_line_val(scale, line, sensor_value);
+        //lv_scale_set_line_needle_value(scale, line, 60, (int)roundf(sensor_value));
+        update_scale_line_val(scale, line, line_pts, sensor_value);
 
         // timers
         lv_timer_handler();
