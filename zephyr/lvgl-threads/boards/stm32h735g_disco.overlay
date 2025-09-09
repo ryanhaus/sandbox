@@ -56,15 +56,7 @@
 };
 
 / {
-    dummy_display: dummy_display {
-        compatible = "zephyr,dummy-dc";
-        status = "okay";
-        width = <480>;
-        height = <272>;
-    };
-
     chosen {
-        //zephyr,display = &ltdc;
-        zephyr,display = &dummy_display;
+        zephyr,display = &ltdc;
     };
 };
