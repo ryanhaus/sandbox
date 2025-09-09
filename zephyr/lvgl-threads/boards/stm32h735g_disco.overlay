@@ -5,6 +5,7 @@
     width = <480>;
 	height = <272>;
 
+    /*
     pinctrl-0 = <
         &ltdc_r0_pe0  &ltdc_r1_ph3  &ltdc_r2_ph8    &ltdc_r3_ph9
         &ltdc_r4_ph10 &ltdc_r5_ph11 &ltdc_r6_pe1    &ltdc_r7_pe15
@@ -14,8 +15,9 @@
         &ltdc_b4_pe12 &ltdc_b5_pa3  &ltdc_b6_pb8    &ltdc_b7_pb9
         &ltdc_de_pe13 &ltdc_clk_pg7 &ltdc_hsync_pc6 &ltdc_vsync_pa4
     >;
+    */
 
-	pinctrl-names = "default";
+	//pinctrl-names = "default";
 
 	disp-on-gpios = <&gpiod 10 GPIO_ACTIVE_HIGH>;
     
@@ -38,7 +40,15 @@
 };
 
 / {
+    dummy_display: dummy_display {
+        compatible = "zephyr,dummy-dc";
+        status = "okay";
+        width = <480>;
+        height = <272>;
+    };
+
     chosen {
-        zephyr,display = &ltdc;
+        //zephyr,display = &ltdc;
+        zephyr,display = &dummy_display;
     };
 };
