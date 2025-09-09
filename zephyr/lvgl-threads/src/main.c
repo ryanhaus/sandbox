@@ -155,7 +155,7 @@ void blinky(void)
     struct gpio_dt_spec led = GPIO_DT_SPEC_GET(DT_ALIAS(led0), gpios);
 
     if (!gpio_is_ready_dt(&led))
-		return 0;
+		return;
 
     gpio_pin_configure_dt(&led, GPIO_OUTPUT_ACTIVE);
 
