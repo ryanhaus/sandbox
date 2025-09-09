@@ -35,8 +35,6 @@
 		hfront-porch = <8>;
 		vfront-porch = <4>;
 	};
-
-    def-back-color-red = <0xFF>;
 };
 
 &clk_hse {
