@@ -13,8 +13,9 @@
 
 volatile float sensor_value = 0.0f;
 
-void update_scale_line_val(lv_obj_t* scale, lv_obj_t* line, lv_point_precise_t* line_pts, float val)
+void update_scale_line_val(lv_obj_t* scale, lv_obj_t* line, float val)
 {
+    // calculate scale and line parameters
     int LINE_LEN = 60;
     int LINE_OFFSET_X = lv_obj_get_width(scale) / 2;
     int LINE_OFFSET_Y = lv_obj_get_height(scale) / 2;
@@ -25,15 +26,24 @@ void update_scale_line_val(lv_obj_t* scale, lv_obj_t* line, lv_point_precise_t* 
         angle_range = lv_scale_get_angle_range(scale),
         rot = lv_scale_get_rotation(scale);
 
+    // get line_pts reference, or allocate it if necessary
+    lv_point_precise_t* line_pts = lv_line_get_points_mutable(line);
+
+    if (line_pts == NULL)
+    {
+        line_pts = lv_malloc(sizeof(lv_point_precise_t) * 2);
+    }
+
+    // update line_pts
     line_pts[0].x = LINE_OFFSET_X;
     line_pts[0].y = LINE_OFFSET_Y;
 
-    float angle_mult = M_2PI * (float)angle_range / 360.0f,
+    float angle_mult =   M_2PI * (float)angle_range / 360.0f,
           angle_offset = M_2PI * (float)rot / 360.0f;
     line_pts[1].x = LINE_OFFSET_X + LINE_LEN * cosf(angle_mult * val / range + angle_offset);
     line_pts[1].y = LINE_OFFSET_Y + LINE_LEN * sinf(angle_mult * val / range + angle_offset);
 
-    lv_line_set_points(line, line_pts, 2);
+    lv_line_set_points_mutable(line, line_pts, 2);
     lv_obj_move_foreground(line);
 }
 
@@ -103,8 +113,6 @@ int main(void)
 
     // create scale line
     lv_obj_t* line = lv_line_create(scale);
-    lv_point_precise_t line_pts[2];
-
     lv_obj_set_style_line_color(line, lv_color_hex(0xFF0000), LV_PART_MAIN);
     lv_obj_set_style_line_width(line, 6, LV_PART_MAIN);
     lv_obj_set_style_line_rounded(line, true, LV_PART_MAIN);
@@ -122,7 +130,7 @@ int main(void)
         
         // update line position
         //lv_scale_set_line_needle_value(scale, line, 60, (int)roundf(sensor_value));
-        update_scale_line_val(scale, line, line_pts, sensor_value);
+        update_scale_line_val(scale, line, sensor_value);
 
         // timers
         lv_timer_handler();
