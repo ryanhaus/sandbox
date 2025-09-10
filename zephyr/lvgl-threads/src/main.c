@@ -62,24 +62,6 @@ int main(void)
         LV_PART_MAIN
     );
 
-    // create label
-    lv_obj_t* label = lv_label_create(lv_screen_active());
-    lv_label_set_text(label, ""); 
-
-    lv_obj_set_style_text_font(
-        label,
-        &lv_font_montserrat_20,
-        LV_PART_MAIN
-    ); 
-    
-    lv_obj_set_style_text_color(
-        lv_screen_active(),
-        lv_color_hex(0x000000),
-        LV_PART_MAIN
-    );
-
-    lv_obj_align(label, LV_ALIGN_BOTTOM_MID, 0, 0);
-
     // create scale
     lv_obj_t* scale = lv_scale_create(lv_screen_active());
 
@@ -117,6 +99,24 @@ int main(void)
     lv_obj_set_style_line_width(line, 6, LV_PART_MAIN);
     lv_obj_set_style_line_rounded(line, true, LV_PART_MAIN);
 
+    // create label
+    lv_obj_t* label = lv_label_create(scale);
+    lv_label_set_text(label, ""); 
+
+    lv_obj_set_style_text_font(
+        label,
+        &lv_font_montserrat_20,
+        LV_PART_MAIN
+    ); 
+    
+    lv_obj_set_style_text_color(
+        lv_screen_active(),
+        lv_color_hex(0x000000),
+        LV_PART_MAIN
+    );
+
+    lv_obj_align(label, LV_ALIGN_BOTTOM_MID, 0, 0);
+
     /* LVGL main loop */
     display_blanking_off(display_dev);
 
@@ -129,7 +129,6 @@ int main(void)
         lv_label_set_text(label, label_str);
         
         // update line position
-        //lv_scale_set_line_needle_value(scale, line, 60, (int)roundf(sensor_value));
         update_scale_line_val(scale, line, sensor_value);
 
         // timers
