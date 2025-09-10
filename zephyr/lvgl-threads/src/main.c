@@ -27,9 +27,22 @@ int main(void)
         LV_PART_MAIN
     );
 
+    // create grid layout
+    static int32_t col_dsc[] = { LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST };
+    static int32_t row_dsc[] = { LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST };
+
+    lv_obj_set_layout(lv_screen_active(), LV_LAYOUT_GRID);
+    lv_obj_set_grid_dsc_array(lv_screen_active(), col_dsc, row_dsc);
+
     // create custom scale
     lv_obj_t *scale, *line, *label;
     setup_scale_custom(lv_screen_active(), &scale, &line, &label);
+
+    lv_obj_set_grid_cell(
+        scale,
+        LV_GRID_ALIGN_CENTER, 0, 1,
+        LV_GRID_ALIGN_CENTER, 0, 1
+    );
 
 
     /* LVGL main loop */
