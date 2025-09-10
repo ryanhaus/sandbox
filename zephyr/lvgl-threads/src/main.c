@@ -13,6 +13,69 @@
 
 volatile float sensor_value = 0.0f;
 
+void setup_scale_custom(lv_obj_t* parent, lv_obj_t** scale_ptr, lv_obj_t** line_ptr, lv_obj_t** label_ptr)
+{
+    // create scale
+    lv_obj_t* scale = lv_scale_create(parent);
+
+    lv_obj_set_size(scale, 150, 150);
+    lv_scale_set_mode(scale, LV_SCALE_MODE_ROUND_INNER);
+
+    lv_obj_set_style_text_font(
+        scale,
+        &lv_font_montserrat_14,
+        LV_PART_MAIN
+    ); 
+
+    lv_obj_set_style_bg_opa(scale, LV_OPA_COVER, 0);
+    lv_obj_set_style_bg_color(scale, lv_color_hex(0xDDDDDD), 0);
+    lv_obj_set_style_radius(scale, LV_RADIUS_CIRCLE, 0);
+    lv_obj_set_style_clip_corner(scale, true, 0);
+    lv_obj_align(scale, LV_ALIGN_LEFT_MID, LV_PCT(2), 0);
+
+    lv_scale_set_label_show(scale, true);
+
+    lv_scale_set_total_tick_count(scale, 26);
+    lv_scale_set_major_tick_every(scale, 5);
+
+    lv_obj_set_style_length(scale, 5, LV_PART_ITEMS);
+    lv_obj_set_style_length(scale, 10, LV_PART_INDICATOR);
+    lv_scale_set_range(scale, 0, 25);
+
+    lv_scale_set_angle_range(scale, 270);
+    lv_scale_set_rotation(scale, 135);
+    lv_obj_center(scale);
+
+    // create scale line
+    lv_obj_t* line = lv_line_create(scale);
+    lv_obj_set_style_line_color(line, lv_color_hex(0xFF0000), LV_PART_MAIN);
+    lv_obj_set_style_line_width(line, 6, LV_PART_MAIN);
+    lv_obj_set_style_line_rounded(line, true, LV_PART_MAIN);
+
+    // create label
+    lv_obj_t* label = lv_label_create(scale);
+    lv_label_set_text(label, ""); 
+
+    lv_obj_set_style_text_font(
+        label,
+        &lv_font_montserrat_18,
+        LV_PART_MAIN
+    ); 
+    
+    lv_obj_set_style_text_color(
+        lv_screen_active(),
+        lv_color_hex(0x000000),
+        LV_PART_MAIN
+    );
+
+    lv_obj_align(label, LV_ALIGN_BOTTOM_MID, 0, 0);
+
+    // update pointers with addresses
+    *scale_ptr = scale;
+    *line_ptr = line;
+    *label_ptr = label;
+}
+
 void update_scale_custom(lv_obj_t* scale, lv_obj_t* line, lv_obj_t* label, float val)
 {
     // calculate scale and line parameters
@@ -68,60 +131,10 @@ int main(void)
         LV_PART_MAIN
     );
 
-    // create scale
-    lv_obj_t* scale = lv_scale_create(lv_screen_active());
+    // create custom scale
+    lv_obj_t *scale, *line, *label;
+    setup_scale_custom(lv_screen_active(), &scale, &line, &label);
 
-    lv_obj_set_size(scale, 150, 150);
-    lv_scale_set_mode(scale, LV_SCALE_MODE_ROUND_INNER);
-
-    lv_obj_set_style_text_font(
-        scale,
-        &lv_font_montserrat_14,
-        LV_PART_MAIN
-    ); 
-
-    lv_obj_set_style_bg_opa(scale, LV_OPA_COVER, 0);
-    lv_obj_set_style_bg_color(scale, lv_color_hex(0xDDDDDD), 0);
-    lv_obj_set_style_radius(scale, LV_RADIUS_CIRCLE, 0);
-    lv_obj_set_style_clip_corner(scale, true, 0);
-    lv_obj_align(scale, LV_ALIGN_LEFT_MID, LV_PCT(2), 0);
-
-    lv_scale_set_label_show(scale, true);
-
-    lv_scale_set_total_tick_count(scale, 26);
-    lv_scale_set_major_tick_every(scale, 5);
-
-    lv_obj_set_style_length(scale, 5, LV_PART_ITEMS);
-    lv_obj_set_style_length(scale, 10, LV_PART_INDICATOR);
-    lv_scale_set_range(scale, 0, 25);
-
-    lv_scale_set_angle_range(scale, 270);
-    lv_scale_set_rotation(scale, 135);
-    lv_obj_center(scale);
-
-    // create scale line
-    lv_obj_t* line = lv_line_create(scale);
-    lv_obj_set_style_line_color(line, lv_color_hex(0xFF0000), LV_PART_MAIN);
-    lv_obj_set_style_line_width(line, 6, LV_PART_MAIN);
-    lv_obj_set_style_line_rounded(line, true, LV_PART_MAIN);
-
-    // create label
-    lv_obj_t* label = lv_label_create(scale);
-    lv_label_set_text(label, ""); 
-
-    lv_obj_set_style_text_font(
-        label,
-        &lv_font_montserrat_18,
-        LV_PART_MAIN
-    ); 
-    
-    lv_obj_set_style_text_color(
-        lv_screen_active(),
-        lv_color_hex(0x000000),
-        LV_PART_MAIN
-    );
-
-    lv_obj_align(label, LV_ALIGN_BOTTOM_MID, 0, 0);
 
     /* LVGL main loop */
     display_blanking_off(display_dev);
