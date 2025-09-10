@@ -34,16 +34,24 @@ int main(void)
     lv_obj_set_layout(lv_screen_active(), LV_LAYOUT_GRID);
     lv_obj_set_grid_dsc_array(lv_screen_active(), col_dsc, row_dsc);
 
-    // create custom scale
-    lv_obj_t *scale, *line, *label;
-    setup_scale_custom(lv_screen_active(), &scale, &line, &label);
+    // create 2 custom scales
+    lv_obj_t *scale1, *line1, *label1,
+             *scale2, *line2, *label2;
+
+    setup_scale_custom(lv_screen_active(), &scale1, &line1, &label1);
+    setup_scale_custom(lv_screen_active(), &scale2, &line2, &label2);
 
     lv_obj_set_grid_cell(
-        scale,
+        scale1,
         LV_GRID_ALIGN_CENTER, 0, 1,
         LV_GRID_ALIGN_CENTER, 0, 1
     );
 
+    lv_obj_set_grid_cell(
+        scale2,
+        LV_GRID_ALIGN_CENTER, 1, 1,
+        LV_GRID_ALIGN_CENTER, 0, 1
+    );
 
     /* LVGL main loop */
     display_blanking_off(display_dev);
@@ -51,7 +59,8 @@ int main(void)
     while (1)
     {
         // update scale
-        update_scale_custom(scale, line, label, sensor_value);
+        update_scale_custom(scale1, line1, label1, sensor_value);
+        update_scale_custom(scale2, line2, label2, fmodf((float)k_uptime_get() / 100.0f , 25.0f));
 
         // timers
         lv_timer_handler();
