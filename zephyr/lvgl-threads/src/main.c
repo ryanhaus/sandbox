@@ -13,7 +13,7 @@
 
 volatile float sensor_value = 0.0f;
 
-void update_scale_line_val(lv_obj_t* scale, lv_obj_t* line, float val)
+void update_scale_custom(lv_obj_t* scale, lv_obj_t* line, lv_obj_t* label, float val)
 {
     // calculate scale and line parameters
     int LINE_LEN = 60;
@@ -25,6 +25,12 @@ void update_scale_line_val(lv_obj_t* scale, lv_obj_t* line, float val)
         range = max - min,
         angle_range = lv_scale_get_angle_range(scale),
         rot = lv_scale_get_rotation(scale);
+
+    // update label text
+    char label_str[32];
+    snprintf(label_str, sizeof(label_str), "%.1f", (double)sensor_value);
+
+    lv_label_set_text(label, label_str);
 
     // get line_pts reference, or allocate it if necessary
     lv_point_precise_t* line_pts = lv_line_get_points_mutable(line);
@@ -105,7 +111,7 @@ int main(void)
 
     lv_obj_set_style_text_font(
         label,
-        &lv_font_montserrat_20,
+        &lv_font_montserrat_18,
         LV_PART_MAIN
     ); 
     
@@ -122,14 +128,8 @@ int main(void)
 
     while (1)
     {
-        // update label text
-        char label_str[32];
-        snprintf(label_str, sizeof(label_str), "%.1f", (double)sensor_value);
-
-        lv_label_set_text(label, label_str);
-        
-        // update line position
-        update_scale_line_val(scale, line, sensor_value);
+        // update scale
+        update_scale_custom(scale, line, label, sensor_value);
 
         // timers
         lv_timer_handler();
