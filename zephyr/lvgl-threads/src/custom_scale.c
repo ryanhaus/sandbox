@@ -84,7 +84,7 @@ void update_scale_custom(lv_obj_t* scale, lv_obj_t* line, lv_obj_t* label, float
 
     // update label text
     char label_str[32];
-    snprintf(label_str, sizeof(label_str), "%.1f", (double)val);
+    snprintf(label_str, sizeof(label_str), "%i", (int)roundf(val));
 
     lv_label_set_text(label, label_str);
 

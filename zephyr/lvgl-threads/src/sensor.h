@@ -1,3 +1,4 @@
+#pragma once
 #include <zephyr/kernel.h>
 #include <math.h>
 

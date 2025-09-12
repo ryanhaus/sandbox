@@ -8,9 +8,11 @@
 #include <stdio.h>
 
 #include "sensor.h"
+#include "other_sensor.h"
 #include "custom_scale.h"
 
 volatile float sensor_value = 0.0f;
+volatile float other_sensor_value = 0.0f;
 
 int main(void)
 {
@@ -60,7 +62,7 @@ int main(void)
     {
         // update scale
         update_scale_custom(scale1, line1, label1, sensor_value);
-        update_scale_custom(scale2, line2, label2, fmodf((float)k_uptime_get() / 100.0f , 25.0f));
+        update_scale_custom(scale2, line2, label2, other_sensor_value);
 
         // timers
         lv_timer_handler();
@@ -75,10 +77,26 @@ void update_sensor_val(void)
     while (1)
     {
         sensor_value = get_sensor_val();
-        //printf("Updated sensor value: %.2f\t(uptime: %.2f s)\n", sensor_value, (float)k_uptime_get() / 1000.0f);
         k_msleep(20);
     }
 }
+
+void update_other_sensor_val(void)
+{
+    while (1)
+    {
+        other_sensor_value = get_other_sensor_val();
+        k_msleep(10);
+    }
+}
+
+K_THREAD_DEFINE(
+    other_sensor_thread,
+    1024,
+    update_other_sensor_val,
+    NULL, NULL, NULL,
+    7, 0, 0
+);
 
 K_THREAD_DEFINE(
     sensor_thread,
