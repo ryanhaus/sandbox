@@ -65,8 +65,8 @@ int main(void)
         update_scale_custom(scale2, line2, label2, other_sensor_value);
 
         // timers
-        lv_timer_handler();
-        k_msleep(5);
+        int sleep_ms = lv_timer_handler();
+        k_msleep(sleep_ms);
     }
 
     return 0;
