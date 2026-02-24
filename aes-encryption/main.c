@@ -1,16 +1,14 @@
 #include <stdio.h>
+#include <string.h>
 #include "aes.h"
 
 int main()
 {
-    aes_block_t block = {
-        {
-            0x4C, 0x6F, 0x72, 0x65,
-            0x6D, 0x20, 0x69, 0x70,
-            0x73, 0x75, 0x6D, 0x20,
-            0x64, 0x6F, 0x6C, 0x6F, 
-        }
-    };
+    aes_block_t blocks[3] = { 0 };
+    int n_blocks = sizeof(blocks) / sizeof(aes_block_t);
+    char* str = (char*)&blocks[0];
+
+    strcpy(str, "The quick brown fox jumps over the lazy dog.");
 
     aes_block_t key = {
         {
@@ -21,19 +19,16 @@ int main()
         }
     };
 
-    printf("Initial block:\n");
-    aes_print_block_mat(&block);
+    printf("Input:\n");
+    aes_print_blocks_bytes(blocks, n_blocks);
 
-    printf("Initial cipher key:\n");
-    aes_print_block_mat(&key);
+    printf("\nKey:\n");
+    aes_print_block_bytes(&key);
 
-    aes_encrypt_block(&block, &key);
+    aes_encrypt_blocks(blocks, n_blocks, &key);
 
-    printf("Final block:\n");
-    aes_print_block_mat(&block);
-
-    printf("Final cipher key:\n");
-    aes_print_block_mat(&key);
+    printf("\nOutput:\n");
+    aes_print_blocks_bytes(blocks, n_blocks);
 
     return 0;
 }

@@ -34,14 +34,26 @@ void next_round_key(aes_block_t*, unsigned int);
 
 void aes_encrypt_block(aes_block_t* block, aes_block_t* cipher_key)
 {
+    // Copy to avoid overwriting
+    aes_block_t key_copy = { 0 };
+    memcpy(&key_copy, cipher_key, sizeof(aes_block_t));
+
     // Initial round: only add cipher key
-    aes_add_round_key(block, cipher_key);
+    aes_add_round_key(block, &key_copy);
 
     // Main rounds
     for (int i = 0; i < 10; i++)
     {
         if (DEBUG) printf("Entering round %i\n", i);
-        aes_encryption_round(block, cipher_key, i);
+        aes_encryption_round(block, &key_copy, i);
+    }
+}
+
+void aes_encrypt_blocks(aes_block_t* blocks, unsigned int n_blocks, aes_block_t* cipher_key)
+{
+    for (int i = 0; i < n_blocks; i++)
+    {
+        aes_encrypt_block(&blocks[i], cipher_key);
     }
 }
 
@@ -360,14 +372,20 @@ void aes_print_block_mat(aes_block_t* block)
 
 void aes_print_block_bytes(aes_block_t* block)
 {
-    char str[16][3] = { 0 };
+    char str[16*2+1] = { 0 };
 
     for (int i = 0; i < 16; i++)
     {
-        sprintf(str[i], "%02X ", block->bytes[i]);
+        sprintf(&str[2*i], "%02X", block->bytes[i]);
     }
 
-    str[15][2] = 0;
-
     printf("%s\n", (char*)str);
+}
+
+void aes_print_blocks_bytes(aes_block_t* blocks, unsigned int n_blocks)
+{
+    for (int i = 0; i < n_blocks; i++)
+    {
+        aes_print_block_bytes(&blocks[i]);
+    }
 }
