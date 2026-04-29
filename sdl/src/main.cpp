@@ -1,3 +1,4 @@
+#include <SDL3/SDL_audio.h>
 #include <stdexcept>
 #include <string>
 #include <SDL3/SDL.h>
@@ -8,7 +9,7 @@
 int main()
 {
     // init
-    if (!SDL_Init(SDL_INIT_VIDEO))
+    if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO))
         throw std::runtime_error("Could not initialize SDL");
 
     // create window
@@ -21,6 +22,19 @@ int main()
     SDL_SetRenderVSync(renderer, 1);
     if (renderer == nullptr)
         throw std::runtime_error("Could not create SDL renderer: " + std::string(SDL_GetError()));
+    
+    // setup audio
+    SDL_AudioSpec spec = {
+        .format = SDL_AUDIO_F32,
+        .channels = 1,
+        .freq = 8000,
+    };
+
+    SDL_AudioStream* stream = SDL_OpenAudioDeviceStream(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &spec, NULL, NULL);
+    if (!stream)
+        throw std::runtime_error("Could not create SDL audio stream: " + std::string(SDL_GetError()));
+
+    SDL_ResumeAudioStreamDevice(stream);
 
     // setup ImGui
     IMGUI_CHECKVERSION();
@@ -39,6 +53,27 @@ int main()
             ImGui_ImplSDL3_ProcessEvent(&e);
             if (e.type == SDL_EVENT_QUIT || e.type == SDL_EVENT_WINDOW_CLOSE_REQUESTED)
                 active = false;
+        }
+
+        // handle audio
+        const int minimum_audio = (8000 * sizeof(float)) / 2;
+
+        if (SDL_GetAudioStreamQueued(stream) < minimum_audio)
+        {
+            static unsigned int n = 0;
+            static float samples[512];
+
+            for (int i = 0; i < SDL_arraysize(samples); i++)
+            {
+                const int freq = 440;
+                
+                samples[i] = 0.25 * SDL_sinf(2.0 * SDL_PI_F * freq * n / 8000.0);
+                n++;
+            }
+
+            n %= 8000;
+
+            SDL_PutAudioStreamData(stream, samples, sizeof(samples));
         }
 
         // setup imgui for rendering 
