@@ -11,5 +11,5 @@ To run:
 ```sh
 $ cmake -B bin
 $ cmake --build bin -j $(nproc)
-$ ./bin/sdl
+$ ./bin/sdl-test
 ```
