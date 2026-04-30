@@ -1,6 +1,8 @@
 #include <SDL3/SDL_audio.h>
+#include <SDL3/SDL_stdinc.h>
 #include <stdexcept>
 #include <string>
+#include <cmath>
 #include <SDL3/SDL.h>
 #include <imgui.h>
 #include <imgui_impl_sdl3.h>
@@ -61,19 +63,20 @@ int main()
         const int minimum_audio = (8000 * sizeof(float)) / 2;
 
         static float samples[512] = { 0 };
-        if (SDL_GetAudioStreamQueued(stream) < minimum_audio)
+        static float freq = 440.0f;
+        static float phase = 0.0f;
+
+        if (SDL_GetAudioStreamQueued(stream) < sizeof(samples))
         {
             static unsigned int n = 0;
 
             for (int i = 0; i < SDL_arraysize(samples); i++)
             {
-                const int freq = 440;
-                
-                samples[i] = 0.25 * SDL_sinf(2.0 * SDL_PI_F * freq * n / 8000.0);
-                n++;
+                samples[i] = 0.25 * SDL_sinf(phase);
+                phase += 2.0 * SDL_PI_F * freq / 8000.0f;
             }
 
-            n %= 8000;
+            phase = fmod(phase, 2.0 * SDL_PI_F);
 
             SDL_PutAudioStreamData(stream, samples, sizeof(samples));
         }
@@ -86,7 +89,8 @@ int main()
         // create things in window
         ImGui::Begin("Test");
 
-        ImGui::Text("Test");
+        ImGui::Text("Select frequency:");
+        ImGui::SliderFloat("float", &freq, 0.0f, 1000.0f);
 
         if (ImPlot::BeginPlot("Audio plot"))
         {
