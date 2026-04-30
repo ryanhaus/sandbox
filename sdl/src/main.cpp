@@ -5,6 +5,7 @@
 #include <imgui.h>
 #include <imgui_impl_sdl3.h>
 #include <imgui_impl_sdlrenderer3.h>
+#include <implot.h>
 
 int main()
 {
@@ -36,11 +37,12 @@ int main()
 
     SDL_ResumeAudioStreamDevice(stream);
 
-    // setup ImGui
+    // setup ImGui & ImPlot
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGui_ImplSDL3_InitForSDLRenderer(window, renderer);
     ImGui_ImplSDLRenderer3_Init(renderer);
+    ImPlot::CreateContext();
 
     // main loop
     bool active = true;
@@ -58,10 +60,10 @@ int main()
         // handle audio
         const int minimum_audio = (8000 * sizeof(float)) / 2;
 
+        static float samples[512] = { 0 };
         if (SDL_GetAudioStreamQueued(stream) < minimum_audio)
         {
             static unsigned int n = 0;
-            static float samples[512];
 
             for (int i = 0; i < SDL_arraysize(samples); i++)
             {
@@ -83,8 +85,17 @@ int main()
 
         // create things in window
         ImGui::Begin("Test");
+
         ImGui::Text("Test");
+
+        if (ImPlot::BeginPlot("Audio plot"))
+        {
+            ImPlot::PlotLine("Audio samples", samples, SDL_arraysize(samples));
+            ImPlot::EndPlot();
+        }
+
         ImGui::End();
+
 
         // render
         ImGui::Render();
@@ -95,6 +106,7 @@ int main()
     }
 
     // exit
+    ImPlot::DestroyContext();
     ImGui_ImplSDLRenderer3_Shutdown();
     ImGui_ImplSDL3_Shutdown();
     ImGui::DestroyContext();

@@ -2,7 +2,8 @@ include(FetchContent)
 
 # imgui
 FetchContent_Declare(imgui
-    URL https://github.com/ocornut/imgui/archive/docking.zip
+    GIT_REPOSITORY https://github.com/ocornut/imgui.git
+    GIT_SHALLOW TRUE
     SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/deps/imgui
 )
 
@@ -25,8 +26,25 @@ target_include_directories(imgui
         ${CMAKE_CURRENT_LIST_DIR}/deps/imgui/backends
 )
 
-target_include_directories(imgui
+# implot
+FetchContent_Declare(implot
+    GIT_REPOSITORY https://github.com/epezent/implot.git
+    GIT_SHALLOW TRUE
+    SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/deps/implot
+)
+
+FetchContent_MakeAvailable(implot)
+
+add_library(implot
+    STATIC
+        deps/imgui/imgui.cpp
+        deps/implot/implot.cpp
+        deps/implot/implot_items.cpp
+)
+
+target_include_directories(implot
     PUBLIC
         ${CMAKE_CURRENT_LIST_DIR}/deps/imgui
         ${CMAKE_CURRENT_LIST_DIR}/deps/imgui/backends
+        ${CMAKE_CURRENT_LIST_DIR}/deps/implot
 )
